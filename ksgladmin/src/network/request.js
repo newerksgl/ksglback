@@ -3,7 +3,7 @@ import { Message } from 'element-ui';  //element库的消息提示，可以不�
 
 //创建axios实例
 var service = axios.create({
-    baseURL: 'http://192.168.43.29:9999/',
+    baseURL: 'http://localhost:9999/',
     timeout: 5000,
     headers: {
         'content-type': 'application/json',
