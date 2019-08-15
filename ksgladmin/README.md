@@ -1,4 +1,4 @@
-# ksgladmin
+# ksgl
 
 ## Project setup
 ```

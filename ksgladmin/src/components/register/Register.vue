@@ -12,17 +12,15 @@
         <el-form-item label="账号" prop="name">
           <el-input type="text" placeholder="请输入用户名" v-model="ruleForm.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item
-          prop="email"
-          label="邮箱"
-          placeholder="1258956484@qq.com"
-          :rules="[
-      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-      { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
-    ]"
-        >
-          <el-input v-model="ruleForm.email"></el-input>
+        <el-form-item label="电子邮箱" prop="email">
+          <el-input
+            type="email"
+            placeholder="1258956484@qq.com"
+            v-model="ruleForm.email"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
+
         <el-form-item label="密码" prop="pass">
           <el-input type="password" placeholder="请输入密码" v-model="ruleForm.pass" autocomplete="off"></el-input>
         </el-form-item>

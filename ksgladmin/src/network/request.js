@@ -3,7 +3,7 @@ import { Message } from 'element-ui';  //element库的消息提示，可以不�
 
 //创建axios实例
 var service = axios.create({
-    baseURL: 'http://192.168.43.81:9999/',
+    baseURL: 'http://localhost:9999/',
     timeout: 5000,
     headers: {
         'content-type': 'application/json',
@@ -29,7 +29,7 @@ export default {
             }).catch(err => {
                 if (!err.response) {
                     console.log('请求错误')
-                    // Message是element库的组件，可以去掉
+                    //Message是element库的组件，可以去掉
                     Message({
                         showClose: true,
                         message: '请求错误',
@@ -60,7 +60,7 @@ export default {
             }).catch(err => {
                 if (!err.response) {
                     console.log('请求错误')
-                    // Message是element库的组件，可以去掉
+                    //Message是element库的组件，可以去掉
                     Message({
                         showClose: true,
                         message: '请求错误',
