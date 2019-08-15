@@ -87,15 +87,30 @@ export default {
             .then(res => {
               console.log(res.data);
               if (res.data != "") {
-                alert("登录成功");
+                this.$message({
+                  showClose: true,
+                  message: "登录成功！",
+                  type: "success",
+                  duration: 1000
+                });
                 PubSub.publish("search", res.data);
                 this.$router.push("shouye");
               } else {
-                alert("用户名或密码错误!");
+                this.$message({
+                  showClose: true,
+                  message: "用户名或密码错误!",
+                  type: "error",
+                  duration: 1000
+                });
               }
             })
             .catch(err => {
-              alert("用户名或密码错误!");
+              this.$message({
+                showClose: true,
+                message: "用户名或密码错误!",
+                type: "error",
+                duration: 1000
+              });
             });
         } else {
           console.log("error submit!!");
