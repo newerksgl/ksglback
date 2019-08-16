@@ -30,8 +30,9 @@
                   <el-form-item label="默认角色">
                     <el-select v-model="UserRole.defaultrole">
                       <el-option label="用户" value="1"></el-option>
-                      <el-option label="教师" value="2"></el-option>
-                      <el-option label="管理员" value="3"></el-option>
+                      <el-option label="学生" value="2"></el-option>
+                      <el-option label="教师" value="3"></el-option>
+                      <el-option label="管理员" value="4"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -53,6 +54,21 @@
               </el-row>
             </el-form>
           </el-tab-pane>
+          <el-table :data="UserRoles" height="550" style="width: 100%">
+            <el-table-column prop="role_name" label="角色名"></el-table-column>
+            <el-table-column prop="defaultrole" label="默认角色"></el-table-column>
+            <el-table-column prop="description" label="角色描述"></el-table-column>
+            <el-table-column prop="isadmin" label="是否为管理员">
+              <span></span>
+            </el-table-column>
+            <el-table-column label="操 作">
+              <template slot-scope="scope">
+                <label class="el-icon-edit" @click="edit(scope.row)"></label>
+                <span>&nbsp;&nbsp;</span>
+                <label class="el-icon-circle-close" @click="remove(scope.row.rid)"></label>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-tabs>
       </el-col>
       <el-col :span="4">
@@ -63,6 +79,27 @@
         </el-button>
       </el-col>
     </el-row>
+
+    <el-dialog title="修改用户" :visible.sync="dialogFormVisible">
+      <el-form :model="upUserRole">
+        <el-form-item label="角色名" :label-width="formLabelWidth">
+          <el-input v-model="upUserRole.role_name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="默认角色" :label-width="formLabelWidth">
+          <el-input v-model="upUserRole.defaultrole" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="角色描述" :label-width="formLabelWidth">
+          <el-input v-model="upUserRole.description" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="是否为管理员" :label-width="formLabelWidth">
+          <el-checkbox v-model="upUserRole.isadmin">管理员</el-checkbox>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="clearupUser();">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -86,13 +123,52 @@ export default {
     };
     return {
       isAddRole: false,
+      dialogFormVisible: false,
+      formLabelWidth: "120px",
       UserRole: {
+        rid: "",
+        role_name: "",
+        defaultrole: "1",
+        description: "",
+        isadmin: true
+      },
+      upUserRole: {
         rid: "",
         role_name: "",
         defaultrole: "1",
         description: "",
         isadmin: false
       },
+      UserRoles: [
+        {
+          rid: "1",
+          role_name: "用户",
+          defaultrole: "1",
+          description: "测试数据",
+          isadmin: false
+        },
+        {
+          rid: "2",
+          role_name: "学生",
+          defaultrole: "2",
+          description: "测试数据",
+          isadmin: false
+        },
+        {
+          rid: "3",
+          role_name: "教师",
+          defaultrole: "3",
+          description: "测试数据",
+          isadmin: false
+        },
+        {
+          rid: "4",
+          role_name: "管理员",
+          defaultrole: "4",
+          description: "测试数据",
+          isadmin: true
+        }
+      ],
       rules: {
         role_name: [{ validator: validateRole_Name, trigger: "blur" }],
         description: [{ validator: validateDescription, trigger: "blur" }]
@@ -101,17 +177,47 @@ export default {
   },
   components: {},
   methods: {
-    clearRole() {},
+    clearRole() {
+      this.UserRole = {
+        rid: "",
+        role_name: "",
+        defaultrole: "1",
+        description: "",
+        isadmin: false
+      };
+    },
+    clearupUser() {
+      this.upUserRole = {
+        rid: "",
+        role_name: "",
+        defaultrole: "1",
+        description: "",
+        isadmin: 否
+      };
+    },
     submitForm(formName) {
       console.log(this.UserRole);
-      // this.$refs[formName].validate(valid => {
-      //   if (valid) {
-      //     alert("submit!");
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    remove(id) {
+      console.log(id);
+    },
+    edit(row) {
+      console.log(row);
+      this.upUserRole.rid = row.id;
+      this.upUserRole.role_name = row.role_name;
+      this.upUserRole.defaultrole = row.defaultrole;
+      this.upUserRole.description = row.description;
+      this.upUserRole.isadmin = row.isadmin;
+
+      this.dialogFormVisible = true;
     }
   }
 };
