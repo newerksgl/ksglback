@@ -12,7 +12,7 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="20" :offset="2">
+      <el-col :offset="2">
         <el-tabs v-model="activeName">
           <el-tab-pane label="地区设置" name="first">
             <el-table :data="tableData" height="250" style="width: 100%">
