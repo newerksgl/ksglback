@@ -136,8 +136,8 @@ export default {
       if (value === "") {
         callback(new Error("请输入用户名"));
       } else {
-        if (this.ruleForm.name !== "") {
-          this.$refs.ruleForm.validateField("name");
+        if (this.User.name !== "") {
+          this.$refs.User.validateField("name");
         }
         callback();
       }
@@ -146,8 +146,8 @@ export default {
       if (value === "") {
         callback(new Error("请输入邮箱"));
       } else {
-        if (this.ruleForm.email !== "") {
-          this.$refs.ruleForm.validateField("email");
+        if (this.User.email !== "") {
+          this.$refs.User.validateField("email");
         }
         callback();
       }
@@ -156,8 +156,8 @@ export default {
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
-        if (this.ruleForm.passowrd !== "") {
-          this.$refs.ruleForm.validateField("passowrd");
+        if (this.User.passowrd !== "") {
+          this.$refs.User.validateField("passowrd");
         }
         callback();
       }
