@@ -41,7 +41,7 @@
         <el-menu-item index="shouye">
           <h4>全局</h4>
         </el-menu-item>
-        <el-menu-item index="kecheng">
+        <el-menu-item index="linemodule">
           <h4>用户模块</h4>
         </el-menu-item>
         <el-menu-item index="kaoshi">
