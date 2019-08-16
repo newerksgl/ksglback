@@ -8,6 +8,12 @@ import Coursemng from "../components/courseManagement/Coursemng.vue";
 import MoKuaigl from "../components/courseManagement/MoKuaigl.vue";
 //证书模块
 import Ccie from '../components/ccie/Ccie.vue'
+// 用户模块
+import User from '../components/linemodule/User.vue'
+import ModelManagement from '../components/linemodule/ModelManagement.vue'
+import Moduledesign from '../components/linemodule/Moduledesign.vue'
+import RoleManagement from '../components/linemodule/RoleManagement.vue'
+import UserManagement from '../components/linemodule/UserManagement.vue'
 
 import Login from "../components/login/Login.vue";
 import ShouYe from '../components/shouye/ShouYe.vue'
@@ -34,6 +40,33 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: Register
+    }, {
+      path: '/linemodule',
+      name: 'linemodule',
+      component: User,
+      children: [
+        {
+          path: '/modelmanagement',
+          name: 'modelmanagement',
+          component: ModelManagement
+        },
+        {
+          path: '/moduledesign',
+          name: 'moduledesign',
+          component: Moduledesign
+        },
+        {
+          path: '/rolemanagement',
+          name: 'rolemanagement',
+          component: RoleManagement
+        },
+        {
+          path: '/usermanagement',
+          name: 'usermanagement',
+          component: UserManagement
+        }
+
+      ]
     }, {
       path: '/course',
       name: 'course',
