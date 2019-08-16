@@ -67,15 +67,13 @@
 </template>
 
 <script>
+import { callbackify } from "util";
 export default {
   data() {
     var validateRole_Name = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入角色名"));
       } else {
-        if (this.UserRole.role_name !== "") {
-          this.$refs.UserRole.validateField("role_name");
-        }
         callback();
       }
     };
@@ -83,19 +81,16 @@ export default {
       if (value === "") {
         callback(new Error("请输入角色描述"));
       } else {
-        if (this.UserRole.description !== "") {
-          this.$refs.UserRole.validateField("description");
-        }
         callback();
       }
     };
     return {
       isAddRole: false,
       UserRole: {
-        rid: null,
-        role_name: null,
+        rid: "",
+        role_name: "",
         defaultrole: "1",
-        description: null,
+        description: "",
         isadmin: false
       },
       rules: {
