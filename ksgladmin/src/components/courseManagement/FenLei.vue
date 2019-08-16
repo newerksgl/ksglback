@@ -15,7 +15,7 @@
       <el-col :offset="2">
         <el-tabs v-model="activeName">
           <el-tab-pane label="分类管理" name="first">
-            <el-table :data="tableData" height="250" border style="width: 100%">
+            <el-table :data="tableData" height="250" style="width: 100%">
               <el-table-column prop="sid" label="ID" width="180"></el-table-column>
               <el-table-column prop="image" label="略缩图" width="180"></el-table-column>
               <el-table-column prop="name" label="名称"></el-table-column>
