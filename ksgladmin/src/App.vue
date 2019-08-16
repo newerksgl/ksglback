@@ -44,7 +44,7 @@
         <el-menu-item index="linemodule">
           <h4>用户模块</h4>
         </el-menu-item>
-        <el-menu-item index="kaoshi">
+        <el-menu-item index="examination">
           <h4>考试模块</h4>
         </el-menu-item>
         <el-menu-item index="zhengshu">

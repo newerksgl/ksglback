@@ -14,6 +14,11 @@ import ModelManagement from '../components/linemodule/ModelManagement.vue'
 import Moduledesign from '../components/linemodule/Moduledesign.vue'
 import RoleManagement from '../components/linemodule/RoleManagement.vue'
 import UserManagement from '../components/linemodule/UserManagement.vue'
+//考试模块
+import Examination from '../components/Examination/Examination.vue'
+import ExaminationList from '../components/Examination/ExaminationList.vue'
+import AddressSet from '../components/Examination/AddressSet.vue'
+
 
 import Login from "../components/login/Login.vue";
 import ShouYe from '../components/shouye/ShouYe.vue'
@@ -94,6 +99,24 @@ export default new Router({
       path: '/ccie',
       name: 'ccie',
       component: Ccie
+    },
+    {
+      path: '/examination',
+      name: 'examination',
+      component: Examination,
+      children: [
+        {
+          path: '/examinationList',
+          name: 'examinationList',
+          component: ExaminationList
+        },
+        {
+          path: '/addressSet',
+          name: 'addressSet',
+          component: AddressSet
+        }
+
+      ]
     }
   ]
 })
