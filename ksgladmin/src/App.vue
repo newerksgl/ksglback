@@ -38,32 +38,20 @@
         text-color="#333"
         active-text-color="#fff"
       >
-        <el-menu-item index="shouye">
-          <h4>全局</h4>
-        </el-menu-item>
         <el-menu-item index="linemodule">
           <h4>用户模块</h4>
         </el-menu-item>
         <el-menu-item index="examination">
           <h4>考试模块</h4>
         </el-menu-item>
-        <el-menu-item index="zhengshu">
-          <h4>文件模块</h4>
-        </el-menu-item>
-        <el-menu-item index="zhengshu">
-          <h4>内容模块</h4>
-        </el-menu-item>
-        <el-menu-item index="zhengshu">
-          <h4>财务模块</h4>
+        <el-menu-item index="shijuan">
+          <h4>试卷模块</h4>
         </el-menu-item>
         <el-menu-item index="course">
           <h4>课程模块</h4>
         </el-menu-item>
         <el-menu-item index="ccie">
           <h4>证书模块</h4>
-        </el-menu-item>
-        <el-menu-item index="zhengshu">
-          <h4>文档模块</h4>
         </el-menu-item>
       </el-menu>
       <el-main>
