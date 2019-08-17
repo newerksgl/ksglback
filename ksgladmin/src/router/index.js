@@ -149,21 +149,9 @@ export default new Router({
         }
 
       ]
-    },
-    {
-      path: '/kaoshi',
-      name: 'kaoshi',
-      component: KaoshiModule,
-      children: [
-        {
-          path: '/regionSet',
-          name: 'regionSet',
-          component: RegionSet
-        }
-      ]
     }
 
-    
+
 
   ]
 })
