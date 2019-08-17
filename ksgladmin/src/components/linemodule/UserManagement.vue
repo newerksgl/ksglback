@@ -166,7 +166,18 @@ export default {
         rid: "",
         register: ""
       },
-      upUser: {},
+      upUser: {
+        id: "",
+        name: "",
+        email: "",
+        date: "",
+        time: "",
+        password: "",
+        users_ip: "",
+        integral: "",
+        rid: "",
+        register: ""
+      },
       isAddUser: false,
       dialogFormVisible: false,
       formLabelWidth: "120px",
@@ -302,7 +313,18 @@ export default {
       };
     },
     clearupUser() {
-      console.log(this.upUser);
+      this.upUser = {
+        id: "",
+        name: "",
+        email: "",
+        date: "",
+        time: "",
+        password: "",
+        users_ip: "",
+        integral: "",
+        rid: "",
+        register: ""
+      };
       this.dialogFormVisible = false;
     }
   }
