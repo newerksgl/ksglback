@@ -34,12 +34,21 @@
       </el-col>
     </el-row>
 
-    <el-dialog title="编辑分类" :visible.sync="dialogFormVisible">
+    <el-dialog title="编辑考场" :visible.sync="dialogFormVisible">
       <el-form :model="form">
         <el-form-item label="ID" :label-width="formLabelWidth">
-          <el-input v-model="form.reid" autocomplete="off" disabled></el-input>
+          <el-input v-model="form.id" autocomplete="off" disabled></el-input>
         </el-form-item>
-        <el-form-item label="名称" :label-width="formLabelWidth">
+        <el-form-item label="科目" :label-width="formLabelWidth">
+          <el-input v-model="form.courseName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="地区" :label-width="formLabelWidth">
+          <el-input v-model="form.addressName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="开通人数" :label-width="formLabelWidth">
+          <el-input v-model="form.number" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="考场名称" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -51,7 +60,16 @@
 
     <el-dialog title="添加" :visible.sync="dialogFormVisible2">
       <el-form :model="form">
-        <el-form-item label="名称" :label-width="formLabelWidth">
+        <el-form-item label="科目" :label-width="formLabelWidth">
+          <el-input v-model="form.courseName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="地区" :label-width="formLabelWidth">
+          <el-input v-model="form.addressName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="开通人数" :label-width="formLabelWidth">
+          <el-input v-model="form.number" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="考场名称" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -91,9 +109,14 @@ export default {
         }
       ],
       form: {
-        name: "",
+        id: "",
         sid: "",
-        image: ""
+        reid: "",
+        number: "",
+        stateTest: "",
+        name: "",
+        addressName: "",
+        courseName: ""
       },
       dialogFormVisible: false,
       dialogFormVisible2: false,
@@ -104,12 +127,23 @@ export default {
   methods: {
     edit(row) {
       this.dialogFormVisible = true;
-      console.log(row.reid);
-      console.log(row.name);
+      this.form.id = row.id;
+      this.form.sid = row.sid;
+      this.form.number = row.number;
+      this.form.stateTest = row.stateTest;
+      this.form.addressName = row.addressName;
+      this.form.courseName = row.courseName;
       this.form.reid = row.reid;
       this.form.name = row.name;
     },
     goAdd() {
+      this.form.id = "";
+      this.form.sid = "";
+      this.form.number = "";
+      this.form.stateTest = "";
+      this.form.addressName = "";
+      this.form.courseName = "";
+      this.form.reid = "";
       this.form.name = "";
       this.dialogFormVisible2 = true;
     }

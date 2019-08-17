@@ -9,7 +9,7 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="19" :offset="1">
+      <el-col offset="2">
         <el-tabs value="first">
           <el-tab-pane label="用户列表" name="first">
             <el-form
