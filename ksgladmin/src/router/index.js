@@ -18,7 +18,11 @@ import UserManagement from '../components/linemodule/UserManagement.vue'
 import Examination from '../components/Examination/Examination.vue'
 import ExaminationList from '../components/Examination/ExaminationList.vue'
 import AddressSet from '../components/Examination/AddressSet.vue'
-
+//试卷模块
+import Paper from '../components/paper/Paper.vue'
+import Model from '../components/paper/Model.vue'
+import PaperManger from '../components/paper/PaperManger.vue'
+import Question from '../components/paper/Question.vue'
 
 import Login from "../components/login/Login.vue";
 import ShouYe from '../components/shouye/ShouYe.vue'
@@ -114,6 +118,29 @@ export default new Router({
           path: '/addressSet',
           name: 'addressSet',
           component: AddressSet
+        }
+
+      ]
+    },
+    {
+      path: '/paper',
+      name: 'paper',
+      component: Paper,
+      children: [
+        {
+          path: '/model',
+          name: 'model',
+          component: Model
+        },
+        {
+          path: '/paperManger',
+          name: 'paperManger',
+          component: PaperManger
+        },
+        {
+          path: '/question',
+          name: 'question',
+          component: Question
         }
 
       ]

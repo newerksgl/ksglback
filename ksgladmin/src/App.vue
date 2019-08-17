@@ -44,7 +44,7 @@
         <el-menu-item index="examination">
           <h4>考试模块</h4>
         </el-menu-item>
-        <el-menu-item index="shijuan">
+        <el-menu-item index="paper">
           <h4>试卷模块</h4>
         </el-menu-item>
         <el-menu-item index="course">

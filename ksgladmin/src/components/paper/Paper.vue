@@ -9,13 +9,17 @@
               <span>首页</span>
             </template>
           </el-menu-item>
-          <el-menu-item index="examinationList">
-            <i class="el-icon-menu"></i>
-            <span slot="title">考场列表</span>
-          </el-menu-item>
-          <el-menu-item index="addressSet">
+          <el-menu-item index="model">
             <i class="el-icon-shopping-cart-full"></i>
-            <span slot="title">地区设置</span>
+            <span slot="title">题型管理</span>
+          </el-menu-item>
+          <el-menu-item index="question">
+            <i class="el-icon-menu"></i>
+            <span slot="title">试题管理</span>
+          </el-menu-item>
+          <el-menu-item index="paperManger">
+            <i class="el-icon-notebook-2"></i>
+            <span slot="title">试卷管理</span>
           </el-menu-item>
         </el-menu>
       </el-col>
