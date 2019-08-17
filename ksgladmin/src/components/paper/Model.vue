@@ -14,7 +14,7 @@
     <el-row>
       <el-col :offset="2">
         <el-tabs v-model="activeName">
-          <el-tab-pane label="地区设置" name="first">
+          <el-tab-pane label="题型管理" name="first">
             <el-table :data="tableData" height="250" style="width: 100%">
               <el-table-column prop="qid" label="ID" width="180"></el-table-column>
               <el-table-column prop="question" label="名称" width="180"></el-table-column>

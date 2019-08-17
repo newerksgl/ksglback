@@ -20,7 +20,7 @@
               <el-table-column prop="name" label="名称" width="180"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button type="text" size="mini" @click="edit(scope.row)">编辑</el-button>
+                  <el-button type="text" size="mini" @click="goedit(scope.row)">编辑</el-button>
                   <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
                 </template>
               </el-table-column>
@@ -30,7 +30,7 @@
       </el-col>
     </el-row>
 
-    <el-dialog title="编辑分类" :visible.sync="dialogFormVisible">
+    <el-dialog title="编辑地区" :visible.sync="dialogFormVisible">
       <el-form :model="form">
         <el-form-item label="ID" :label-width="formLabelWidth">
           <el-input v-model="form.reid" autocomplete="off" disabled></el-input>
@@ -41,11 +41,11 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="edit()">确 定</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog title="添加" :visible.sync="dialogFormVisible2">
+    <el-dialog title="添加地区" :visible.sync="dialogFormVisible2">
       <el-form :model="form">
         <el-form-item label="名称" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -53,7 +53,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible2 = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible2 = false">确 定</el-button>
+        <el-button type="primary" @click="addModel()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -64,20 +64,10 @@ export default {
   data() {
     return {
       activeName: "first",
-      tableData: [
-        {
-          reid: "1",
-          name: "浙江"
-        },
-        {
-          reid: "2",
-          name: "湖南"
-        }
-      ],
+      tableData: [],
       form: {
-        name: "",
-        sid: "",
-        image: ""
+        reid: "",
+        name: ""
       },
       dialogFormVisible: false,
       dialogFormVisible2: false,
@@ -86,7 +76,31 @@ export default {
   },
   components: {},
   methods: {
-    edit(row) {
+    handleDelete(row) {
+      if (confirm("确认删除吗?\n此操作不可以恢复！")) {
+        console.log(row.reid);
+        this.request
+          .post("region/del", { id: row.reid })
+          .then(res => {
+            this.$message({
+              showClose: true,
+              message: "删除成功",
+              type: "success",
+              duration: 1000
+            });
+            this.getTableData();
+          })
+          .catch(err => {
+            this.$message({
+              showClose: true,
+              message: "请求失败",
+              type: "error",
+              duration: 1000
+            });
+          });
+      }
+    },
+    goedit(row) {
       this.dialogFormVisible = true;
       console.log(row.reid);
       console.log(row.name);
@@ -94,9 +108,83 @@ export default {
       this.form.name = row.name;
     },
     goAdd() {
+      this.form.reid = "";
       this.form.name = "";
       this.dialogFormVisible2 = true;
+    },
+    edit() {
+      const question = {
+        reid: this.form.reid,
+        name: this.form.name
+      };
+      this.request
+        .post("region/update", question)
+        .then(res => {
+          this.$message({
+            showClose: true,
+            message: "修改成功",
+            type: "success",
+            duration: 1000
+          });
+          this.getTableData();
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
+
+      this.dialogFormVisible = false;
+    },
+    addModel() {
+      const question = {
+        name: this.form.name
+      };
+      this.request
+        .post("region/add", question)
+        .then(res => {
+          this.$message({
+            showClose: true,
+            message: "添加成功",
+            type: "success",
+            duration: 1000
+          });
+          this.getTableData();
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
+
+      this.dialogFormVisible2 = false;
+    },
+    getTableData() {
+      this.request
+        .post("region/findAll")
+        .then(res => {
+          this.tableData = res.data;
+
+          console.log(res.data);
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
     }
+  },
+  mounted() {
+    this.getTableData();
   }
 };
 </script>
