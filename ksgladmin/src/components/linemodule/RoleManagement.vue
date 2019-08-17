@@ -15,51 +15,51 @@
           <span v-if="isAddRole" class="el-icon-caret-top"></span>
         </el-button>
       </el-col>
-      <el-col v-if="isAddRole">
-        <el-col :span="24">&nbsp;</el-col>
-        <el-col :offset="1">
-          <el-form
-            :model="UserRole"
-            status-icon
-            ref="UserRole"
-            :rules="rules"
-            label-width="100px"
-            class="demo-UserRole"
-          >
-            <el-row>
-              <el-col :span="10">
-                <el-form-item label="角色名称" prop="role_name">
-                  <el-input v-model="UserRole.role_name" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="10" :offset="4">
-                <el-form-item label="默认角色">
-                  <el-select v-model="UserRole.defaultrole">
-                    <el-option label="用户" value="1"></el-option>
-                    <el-option label="学生" value="2"></el-option>
-                    <el-option label="教师" value="3"></el-option>
-                    <el-option label="管理员" value="4"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="16">
-                <el-form-item label="角色描述" prop="description">
-                  <el-input v-model="UserRole.description" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="10">
-                <el-form-item label="管理员身份">
-                  <el-checkbox v-model="UserRole.isadmin">管理员</el-checkbox>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6" :offset="7">
-                <el-form-item>
-                  <el-button type="primary" @click="submitForm('UserRole')">提交</el-button>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </el-col>
+    </el-row>
+    <el-row v-if="isAddRole">
+      <el-col :span="24">&nbsp;</el-col>
+      <el-col :offset="1">
+        <el-form
+          :model="UserRole"
+          status-icon
+          ref="UserRole"
+          :rules="rules"
+          label-width="100px"
+          class="demo-UserRole"
+        >
+          <el-row>
+            <el-col :span="10">
+              <el-form-item label="角色名称" prop="role_name">
+                <el-input v-model="UserRole.role_name" autocomplete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10" :offset="4">
+              <el-form-item label="默认角色">
+                <el-select v-model="UserRole.defaultrole">
+                  <el-option label="用户" value="1"></el-option>
+                  <el-option label="学生" value="2"></el-option>
+                  <el-option label="教师" value="3"></el-option>
+                  <el-option label="管理员" value="4"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="16">
+              <el-form-item label="角色描述" prop="description">
+                <el-input v-model="UserRole.description" autocomplete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10">
+              <el-form-item label="管理员身份">
+                <el-checkbox v-model="UserRole.isadmin">管理员</el-checkbox>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6" :offset="7">
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('UserRole')">提交</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
       </el-col>
       <el-col :span="24">&nbsp;</el-col>
     </el-row>
@@ -72,8 +72,11 @@
             <el-table-column prop="role_name" label="角色名"></el-table-column>
             <el-table-column prop="defaultrole" label="默认角色"></el-table-column>
             <el-table-column prop="description" label="角色描述"></el-table-column>
-            <el-table-column prop="isadmin" label="是否为管理员">
-              <span></span>
+            <el-table-column prop="isadmin" label="管理员身份">
+              <template slot-scope="props">
+                <span v-if="props.row.isadmin">是</span>
+                <span v-if="!props.row.isadmin">否</span>
+              </template>
             </el-table-column>
             <el-table-column label="操 作">
               <template slot-scope="scope">

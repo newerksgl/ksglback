@@ -30,6 +30,11 @@ import Register from '../components/register/Register.vue'
 import Personal from '../components/personal/Personal.vue'
 import Privacy from '../components/personal/Privacy.vue'
 import Integral from '../components/personal/Integral.vue'
+
+import KaoshiModule from '../components/kaoshiModule/Kaoshi.vue'
+import RegionSet from '../components/kaoshiModule/RegionSet.vue'
+
+
 Vue.use(Router)
 
 export default new Router({
@@ -144,6 +149,21 @@ export default new Router({
         }
 
       ]
+    },
+    {
+      path: '/kaoshi',
+      name: 'kaoshi',
+      component: KaoshiModule,
+      children: [
+        {
+          path: '/regionSet',
+          name: 'regionSet',
+          component: RegionSet
+        }
+      ]
     }
+
+    
+
   ]
 })
