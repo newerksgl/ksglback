@@ -9,21 +9,13 @@
               <span>首页</span>
             </template>
           </el-menu-item>
-          <el-menu-item index="usermanagement">
+          <el-menu-item index="examinationList">
             <i class="el-icon-menu"></i>
-            <span slot="title">用户管理</span>
+            <span slot="title">考场列表</span>
           </el-menu-item>
-          <el-menu-item index="rolemanagement">
+          <el-menu-item index="addressSet">
             <i class="el-icon-shopping-cart-full"></i>
-            <span slot="title">角色管理</span>
-          </el-menu-item>
-          <el-menu-item index="moduledesign">
-            <i class="el-icon-notebook-2"></i>
-            <span slot="title">模块设置</span>
-          </el-menu-item>
-          <el-menu-item index="modelmanagement">
-            <i class="el-icon-notebook-2"></i>
-            <span slot="title">模型管理</span>
+            <span slot="title">地区设置</span>
           </el-menu-item>
         </el-menu>
       </el-col>

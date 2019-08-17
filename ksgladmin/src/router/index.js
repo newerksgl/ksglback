@@ -14,6 +14,15 @@ import ModelManagement from '../components/linemodule/ModelManagement.vue'
 import Moduledesign from '../components/linemodule/Moduledesign.vue'
 import RoleManagement from '../components/linemodule/RoleManagement.vue'
 import UserManagement from '../components/linemodule/UserManagement.vue'
+//考试模块
+import Examination from '../components/Examination/Examination.vue'
+import ExaminationList from '../components/Examination/ExaminationList.vue'
+import AddressSet from '../components/Examination/AddressSet.vue'
+//试卷模块
+import Paper from '../components/paper/Paper.vue'
+import Model from '../components/paper/Model.vue'
+import PaperManger from '../components/paper/PaperManger.vue'
+import Question from '../components/paper/Question.vue'
 
 import Login from "../components/login/Login.vue";
 import ShouYe from '../components/shouye/ShouYe.vue'
@@ -101,15 +110,44 @@ export default new Router({
       component: Ccie
     },
     {
-      path: '/kaoshi',
-      name: 'kaoshi',
-      component: KaoshiModule,
+      path: '/examination',
+      name: 'examination',
+      component: Examination,
       children: [
         {
-          path: '/regionSet',
-          name: 'regionSet',
-          component: RegionSet
+          path: '/examinationList',
+          name: 'examinationList',
+          component: ExaminationList
+        },
+        {
+          path: '/addressSet',
+          name: 'addressSet',
+          component: AddressSet
         }
+
+      ]
+    },
+    {
+      path: '/paper',
+      name: 'paper',
+      component: Paper,
+      children: [
+        {
+          path: '/model',
+          name: 'model',
+          component: Model
+        },
+        {
+          path: '/paperManger',
+          name: 'paperManger',
+          component: PaperManger
+        },
+        {
+          path: '/question',
+          name: 'question',
+          component: Question
+        }
+
       ]
     }
 

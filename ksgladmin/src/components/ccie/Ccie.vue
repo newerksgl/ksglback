@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row class="tac">
-      <el-col :span="3" :offset="3">
+      <el-col :span="3" :offset="1">
         <el-menu router :default-active="activeIndex" class="el-menu-vertical-demo">
           <el-menu-item index="shouye">
             <template slot="title">

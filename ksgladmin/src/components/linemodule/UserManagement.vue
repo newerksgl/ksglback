@@ -1,75 +1,90 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="6" :offset="6">
+      <el-col :span="24">&nbsp;</el-col>
+      <el-col :span="15" :offset="6">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>用户管理</el-breadcrumb-item>
         </el-breadcrumb>
       </el-col>
+      <el-col :span="2" :offset="1">
+        <el-button type="primary" @click="clearUser();isAddUser=!isAddUser">
+          添加用户
+          <span v-if="!isAddUser" class="el-icon-caret-bottom"></span>
+          <span v-if="isAddUser" class="el-icon-caret-top"></span>
+        </el-button>
+      </el-col>
     </el-row>
-    <el-row>
-      <el-col :span="19" :offset="1">
-        <el-tabs value="first">
-          <el-tab-pane label="用户列表" name="first">
-            <el-form
-              :model="User"
-              status-icon
-              :rules="rules"
-              ref="User"
-              label-width="100px"
-              class="demo-User"
-            >
-              <el-row v-if="isAddUser">
-                <el-col :span="10">
-                  <el-form-item label="用户名" prop="name">
-                    <el-input type="test" v-model="User.name" autocomplete="off"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="14">
-                  <el-form-item label="注册时间">
-                    <el-col :span="11">
-                      <el-date-picker
-                        type="date"
-                        placeholder="选择日期"
-                        v-model="User.date"
-                        style="width: 100%;"
-                      ></el-date-picker>
-                    </el-col>
-                    <el-col class="line" :span="2">-</el-col>
-                    <el-col :span="11">
-                      <el-time-picker placeholder="选择时间" v-model="User.time" style="width: 100%;"></el-time-picker>
-                    </el-col>
-                  </el-form-item>
-                </el-col>
 
-                <el-col :span="10">
-                  <el-form-item label="密码" prop="password">
-                    <el-input type="password" v-model="User.password" autocomplete="off"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="14">
-                  <el-form-item label="邮箱" prop="email">
-                    <el-input type="email" v-model="User.email" autocomplete="off"></el-input>
-                  </el-form-item>
-                </el-col>
+    <el-row v-if="isAddUser">
+      <el-col :span="24">&nbsp;</el-col>
+      <el-col :offset="1">
+        <el-form
+          :model="User"
+          status-icon
+          :rules="rules"
+          ref="User"
+          label-width="100px"
+          class="demo-User"
+        >
+          <el-row>
+            <el-col :span="10">
+              <el-form-item label="用户名" prop="name">
+                <el-input type="test" v-model="User.name" autocomplete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="14">
+              <el-form-item label="注册时间">
                 <el-col :span="11">
-                  <el-form-item label="用户组">
-                    <el-select v-model="UserRole.role_name" placeholder="用户类型">
-                      <el-option label="默认用户" value="1"></el-option>
-                      <el-option label="学生" value="2"></el-option>
-                      <el-option label="管理员" value="3"></el-option>
-                    </el-select>
-                  </el-form-item>
+                  <el-date-picker
+                    type="date"
+                    placeholder="选择日期"
+                    v-model="User.date"
+                    style="width: 100%;"
+                  ></el-date-picker>
                 </el-col>
-                <el-col :span="6" :offset="7">
-                  <el-form-item>
-                    <el-button type="primary" @click="submitForm('User')">提交</el-button>
-                  </el-form-item>
+                <el-col class="line" :span="2">-</el-col>
+                <el-col :span="11">
+                  <el-time-picker placeholder="选择时间" v-model="User.time" style="width: 100%;"></el-time-picker>
                 </el-col>
-              </el-row>
-            </el-form>
-          </el-tab-pane>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="10">
+              <el-form-item label="密码" prop="password">
+                <el-input type="password" v-model="User.password" autocomplete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="14">
+              <el-form-item label="邮箱" prop="email">
+                <el-input type="email" v-model="User.email" autocomplete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+              <el-form-item label="用户组">
+                <el-select v-model="UserRole.role_name" placeholder="用户类型">
+                  <el-option label="默认用户" value="1"></el-option>
+                  <el-option label="学生" value="2"></el-option>
+                  <el-option label="管理员" value="3"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6" :offset="7">
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('User')">提交</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </el-col>
+      <el-col :span="24">&nbsp;</el-col>
+    </el-row>
+
+    <el-row>
+      <el-col :offset="1">
+        <el-tabs value="first">
+          <el-tab-pane label="用户列表" name="first"></el-tab-pane>
           <el-table :data="Users" height="550" style="width: 100%">
             <el-table-column prop="name" label="用户名"></el-table-column>
             <el-table-column prop="email" label="邮箱"></el-table-column>
@@ -87,13 +102,6 @@
             </el-table-column>
           </el-table>
         </el-tabs>
-      </el-col>
-      <el-col :span="4">
-        <el-button type="primary" @click="clearUser();isAddUser=!isAddUser">
-          添加用户
-          <span v-if="!isAddUser" class="el-icon-caret-bottom"></span>
-          <span v-if="isAddUser" class="el-icon-caret-top"></span>
-        </el-button>
       </el-col>
     </el-row>
 
@@ -136,9 +144,6 @@ export default {
       if (value === "") {
         callback(new Error("请输入用户名"));
       } else {
-        if (this.ruleForm.name !== "") {
-          this.$refs.ruleForm.validateField("name");
-        }
         callback();
       }
     };
@@ -146,9 +151,6 @@ export default {
       if (value === "") {
         callback(new Error("请输入邮箱"));
       } else {
-        if (this.ruleForm.email !== "") {
-          this.$refs.ruleForm.validateField("email");
-        }
         callback();
       }
     };
@@ -156,9 +158,6 @@ export default {
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
-        if (this.ruleForm.passowrd !== "") {
-          this.$refs.ruleForm.validateField("passowrd");
-        }
         callback();
       }
     };
@@ -175,7 +174,18 @@ export default {
         rid: "",
         register: ""
       },
-      upUser: {},
+      upUser: {
+        id: "",
+        name: "",
+        email: "",
+        date: "",
+        time: "",
+        password: "",
+        users_ip: "",
+        integral: "",
+        rid: "",
+        register: ""
+      },
       isAddUser: false,
       dialogFormVisible: false,
       formLabelWidth: "120px",
@@ -291,8 +301,18 @@ export default {
     },
     edit(row) {
       console.log(row);
-      // this.upUser = row;
-      this.upUser = row;
+      this.upUser = {
+        id: row.id,
+        name: row.name,
+        email: row.email,
+        date: row.date,
+        time: row.password,
+        password: row.password,
+        users_ip: row.users_ip,
+        integral: row.integral,
+        rid: row.rid,
+        register: row.register
+      };
 
       this.dialogFormVisible = true;
     },
@@ -311,8 +331,18 @@ export default {
       };
     },
     clearupUser() {
-      console.log(this.upUser);
-
+      this.upUser = {
+        id: "",
+        name: "",
+        email: "",
+        date: "",
+        time: "",
+        password: "",
+        users_ip: "",
+        integral: "",
+        rid: "",
+        register: ""
+      };
       this.dialogFormVisible = false;
     }
   }

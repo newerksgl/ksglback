@@ -4,7 +4,7 @@
       <el-col :span="6" :offset="6">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>分类管理</el-breadcrumb-item>
+          <el-breadcrumb-item>试卷管理</el-breadcrumb-item>
         </el-breadcrumb>
       </el-col>
       <el-col :span="6" :offset="6">
@@ -214,7 +214,7 @@ export default {
     }
   },
   mounted() {
-    this.getTableData();
+    // this.getTableData();
   },
   components: {}
 };
