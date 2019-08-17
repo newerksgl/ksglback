@@ -8,11 +8,11 @@
         </el-breadcrumb>
       </el-col>
       <el-col :span="6" :offset="6">
-        <el-button type="text" size="mini" @click="goAdd()">添加分类</el-button>
+        <el-button type="text" size="mini" @click="goAdd()">添加考场</el-button>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :offset="1">
+      <el-col :offset="2">
         <el-tabs v-model="activeName">
           <el-tab-pane label="考场列表" name="first">
             <el-table :data="tableData" height="250" style="width: 100%">

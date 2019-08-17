@@ -8,7 +8,7 @@
         </el-breadcrumb>
       </el-col>
       <el-col :span="6" :offset="6">
-        <el-button type="text" size="mini" @click="goAdd()">添加分类</el-button>
+        <el-button type="text" size="mini" @click="goAdd()">添加地区</el-button>
       </el-col>
     </el-row>
     <el-row>
