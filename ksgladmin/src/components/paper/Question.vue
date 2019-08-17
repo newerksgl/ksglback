@@ -1,32 +1,20 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="6" :offset="6">
+      <el-col :span="15" :offset="6">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>试题管理</el-breadcrumb-item>
         </el-breadcrumb>
       </el-col>
-      <el-col :span="6" :offset="6">
-        <el-button type="text" size="mini" @click="goAdd()">添加分类</el-button>
+      <el-col :span="2" :offset="1">
+        <el-button type="primary" @click="clearShiTi();">添加试题</el-button>
       </el-col>
     </el-row>
     <el-row>
       <el-col :offset="2">
         <el-tabs v-model="activeName">
-          <el-tab-pane label="分类管理" name="first">
-            <el-table :data="tableData" height="250" style="width: 100%">
-              <el-table-column prop="sid" label="ID" width="180"></el-table-column>
-              <el-table-column prop="image" label="略缩图" width="180"></el-table-column>
-              <el-table-column prop="name" label="名称"></el-table-column>
-              <el-table-column label="操作">
-                <template slot-scope="scope">
-                  <el-button type="text" size="mini" @click="edit(scope.row)">编辑</el-button>
-                  <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-tab-pane>
+          <el-tab-pane label="试题类表" name="first"></el-tab-pane>
         </el-tabs>
       </el-col>
     </el-row>
@@ -49,21 +37,6 @@
     </el-dialog>
     <el-dialog title="添加分类" :visible.sync="dialogFormVisible1">
       <el-form :model="form">
-        <el-form-item label="略缩图" :label-width="formLabelWidth">
-          <el-row>
-            <el-col :span="16">
-              <img :src="form.image" alt style="width:300px;" />
-            </el-col>
-            <el-col :span="8">
-              <el-upload action="#" list-type="picture-card" :before-upload="beforeupload">
-                <i slot="default" class="el-icon-plus" @click="show(file)"></i>
-              </el-upload>
-            </el-col>
-          </el-row>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt />
-          </el-dialog>
-        </el-form-item>
         <el-form-item label="名称" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
@@ -109,6 +82,9 @@ export default {
     };
   },
   methods: {
+    clearShiTi() {
+      this.dialogFormVisible = true;
+    },
     show(file) {
       console.log(file.url);
     },

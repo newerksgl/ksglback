@@ -16,8 +16,9 @@
         </el-button>
       </el-col>
     </el-row>
+
     <el-row v-if="isAddUser">
-      <el-col span="24">&nbsp;</el-col>
+      <el-col :span="24">&nbsp;</el-col>
       <el-col :offset="1">
         <el-form
           :model="User"
@@ -77,10 +78,11 @@
           </el-row>
         </el-form>
       </el-col>
-      <el-col span="24">&nbsp;</el-col>
+      <el-col :span="24">&nbsp;</el-col>
     </el-row>
+
     <el-row>
-      <el-col offset="2">
+      <el-col :offset="1">
         <el-tabs value="first">
           <el-tab-pane label="用户列表" name="first"></el-tab-pane>
           <el-table :data="Users" height="550" style="width: 100%">
