@@ -72,8 +72,11 @@
             <el-table-column prop="role_name" label="角色名"></el-table-column>
             <el-table-column prop="defaultrole" label="默认角色"></el-table-column>
             <el-table-column prop="description" label="角色描述"></el-table-column>
-            <el-table-column prop="isadmin" label="是否为管理员">
-              <span></span>
+            <el-table-column prop="isadmin" label="管理员身份">
+              <template slot-scope="props">
+                <span v-if="props.row.isadmin">是</span>
+                <span v-if="!props.row.isadmin">否</span>
+              </template>
             </el-table-column>
             <el-table-column label="操 作">
               <template slot-scope="scope">
