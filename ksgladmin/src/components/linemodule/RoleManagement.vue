@@ -80,7 +80,7 @@
       </el-col>
     </el-row>
 
-    <el-dialog title="修改用户" :visible.sync="dialogFormVisible">
+    <el-dialog title="修改角色" :visible.sync="dialogFormVisible">
       <el-form :model="upUserRole">
         <el-form-item label="角色名" :label-width="formLabelWidth">
           <el-input v-model="upUserRole.role_name" autocomplete="off"></el-input>
@@ -192,8 +192,9 @@ export default {
         role_name: "",
         defaultrole: "1",
         description: "",
-        isadmin: 否
+        isadmin: false
       };
+      this.dialogFormVisible = false;
     },
     submitForm(formName) {
       console.log(this.UserRole);
