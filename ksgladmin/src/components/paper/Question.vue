@@ -17,21 +17,21 @@
       <el-col :offset="1">
         <el-tabs v-model="activeName">
           <el-tab-pane label="试题列表" name="first">
-            <el-table :data="Exass" style="width: 100%">
+            <el-table :data="exasSubjectQuestion" style="width: 100%">
               <el-table-column type="expand">
                 <template slot-scope="props">
                   <el-form label-position="left" inline class="demo-table-expand">
                     <el-form-item label="科目">
-                      <span>{{ props.row.sid }}</span>
+                      <span>{{ props.row.s.name }}</span>
                     </el-form-item>
                     <el-form-item label="题型">
-                      <span>{{ props.row.qid }}</span>
+                      <span>{{ props.row.q.question }}</span>
                     </el-form-item>
                     <el-form-item label="难度">
                       <span>{{ props.row.difficulty }}</span>
                     </el-form-item>
                     <el-form-item label="题干">
-                      <span>{{ props.row.question_stem }}</span>
+                      <span>{{ props.row.questionStem }}</span>
                     </el-form-item>
                     <el-form-item label="习题解析">
                       <span>{{ props.row.problem }}</span>
@@ -45,8 +45,8 @@
                   </el-form>
                 </template>
               </el-table-column>
-              <el-table-column prop="sid" label="科目"></el-table-column>
-              <el-table-column prop="qid" label="题型"></el-table-column>
+              <el-table-column prop="s.name" label="科目"></el-table-column>
+              <el-table-column prop="q.question" label="题型"></el-table-column>
               <el-table-column prop="difficulty" label="难度"></el-table-column>
               <el-table-column prop="date" label="录入时间"></el-table-column>
               <el-table-column label="操作">
@@ -81,7 +81,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="题型">
-              <el-select v-model="upExas.qid" placeholder="选择题型">
+              <el-select v-model="upExas.qid" :value="Exas.qid" placeholder="选择题型">
                 <el-option label="选择题" value="1"></el-option>
                 <el-option label="填空题" value="2"></el-option>
               </el-select>
@@ -99,7 +99,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="题干">
-              <el-input type="textarea" v-model="upExas.question_stem"></el-input>
+              <el-input type="textarea" v-model="upExas.questionStem"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -164,16 +164,16 @@
           <el-col :span="8">
             <el-form-item label="难度" prop="difficulty">
               <el-select v-model="Exas.difficulty" placeholder="选择难度">
-                <el-option label="普通" value="1"></el-option>
-                <el-option label="一般" value="2"></el-option>
-                <el-option label="困难" value="3"></el-option>
-                <el-option label="烈狱" value="4"></el-option>
+                <el-option label="普通" value="普通"></el-option>
+                <el-option label="一般" value="一般"></el-option>
+                <el-option label="困难" value="困难"></el-option>
+                <el-option label="炼狱" value="炼狱"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="题干">
-              <el-input type="textarea" v-model="Exas.question_stem"></el-input>
+              <el-input type="textarea" v-model="Exas.questionStem"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -206,7 +206,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible1 = false">取 消</el-button>
-        <el-button type="primary" @click="addFenLei()">提 交</el-button>
+        <el-button type="primary" @click="addExas()">提 交</el-button>
       </div>
     </el-dialog>
   </div>
@@ -235,88 +235,99 @@ export default {
       Exas: {
         sid: "1",
         qid: "1",
-        question_stem: "",
+        questionStem: "",
         reference: "",
         problem: "",
-        difficulty: "简单",
+        difficulty: "普通",
         eid: "",
         date: "2019-08-17 11:49:11"
       },
       upExas: {
         sid: "",
         qid: "1",
-        question_stem: "",
+        questionStem: "",
         reference: "",
         problem: "",
         difficulty: "简单",
         eid: "",
         date: ""
       },
-      Exass: [
+      exasSubjectQuestion: [
         {
           sid: "1",
           qid: "1",
-          question_stem: "测试1",
+          questionStem: "测试1",
           reference: "",
           problem: "",
-          difficulty: "难",
+          difficulty: "一般",
           eid: "1",
-          date: "2019-08-17"
+          date: "2019-08-17",
+          s: { sid: 1, name: "", image: "" },
+          q: { qid: 1, question: "", questionTest: "" }
         },
         {
           sid: "1",
           qid: "1",
-          question_stem: "测试2",
+          questionStem: "测试2",
           reference: "",
           problem: "",
-          difficulty: "难",
+          difficulty: "一般",
           eid: "2",
           date: "2019-08-17"
         }
       ],
-      dialogImageUrl: "",
-      dialogVisible: false,
-      disabled: false,
       dialogFormVisible: false,
       dialogFormVisible1: false,
-      form: {
-        name: "",
-        sid: "",
-        image: ""
-      },
-      formLabelWidth: "120px",
-      param: ""
+      formLabelWidth: "120px"
     };
   },
   methods: {
     clearExas() {
+      var d = new Date();
+      var year = d.getFullYear();
+      var month = d.getMonth();
+      var day = d.getDate();
+      var hour = d.getHours();
+      var minute = d.getMinutes();
+      var second = d.getSeconds();
+
       this.Exas = {
         sid: "1",
         qid: "1",
-        question_stem: "",
+        questionStem: "",
         reference: "",
         problem: "",
-        difficulty: "1",
+        difficulty: "普通",
         eid: "",
-        date: new Date()
+        date:
+          year +
+          "-" +
+          (month + 1) +
+          "-" +
+          day +
+          " " +
+          hour +
+          ":" +
+          minute +
+          ":" +
+          second
       };
       this.dialogFormVisible1 = true;
     },
     show(file) {
       console.log(file.url);
     },
-    addFenLei() {
-      //下面append的东西就会到form表单数据的fields中；
-      this.param.append("name", this.form.name);
+    addExas() {
+      console.log(this.Exas);
       let config = {
         headers: {
           "Content-Type": "multipart/form-data"
         }
       };
-      axios
-        .post("http://192.168.43.29:9999/subject/add", this.param, config)
+      this.request
+        .post("exas/add", this.Exas)
         .then(res => {
-          console.log(res.data);
+          this.getTableData();
         })
         .catch(err => {
           this.$message({
@@ -326,10 +337,6 @@ export default {
             duration: 1000
           });
         });
-
-      //然后通过下面的方式把内容通过axios来传到后台
-      //下面的this.$reqs 是在主js中通过Vue.prototype.$reqs = axios 来把axios赋给它;
-      console.log(11);
       this.dialogFormVisible1 = false;
     },
     beforeupload(file) {
@@ -344,9 +351,9 @@ export default {
     },
     getTableData() {
       this.request
-        .post("subject/findAll")
+        .post("exasSubjectQuestion/find")
         .then(res => {
-          this.tableData = res.data;
+          this.exasSubjectQuestion = res.data.data;
           console.log(res.data);
           //   }
         })
@@ -363,7 +370,7 @@ export default {
       this.upExas = {
         sid: row.sid,
         qid: row.qid,
-        question_stem: row.question_stem,
+        questionStem: row.question_stem,
         reference: row.reference,
         problem: row.problem,
         difficulty: row.difficulty,
@@ -374,10 +381,10 @@ export default {
       console.log(row);
     },
     remove(eid) {
-      const id = eid;
+      const id = { id: eid };
       console.log(id);
       this.request
-        .post("subject/findAll", { sid: id })
+        .post("exas/del", id)
         .then(res => {
           if (res.data != "") {
             this.$message({
@@ -407,7 +414,7 @@ export default {
     }
   },
   mounted() {
-    // this.getTableData();
+    this.getTableData();
   },
   components: {}
 };
