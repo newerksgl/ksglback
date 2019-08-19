@@ -31,7 +31,7 @@
                       <span>{{ props.row.difficulty }}</span>
                     </el-form-item>
                     <el-form-item label="题干">
-                      <span>{{ props.row.questionStem }}</span>
+                      <span>{{ props.row.questionstem }}</span>
                     </el-form-item>
                     <el-form-item label="习题解析">
                       <span>{{ props.row.problem }}</span>
@@ -256,7 +256,7 @@ export default {
         {
           sid: "1",
           qid: "1",
-          questionStem: "测试1",
+          questionstem: "测试1",
           reference: "",
           problem: "",
           difficulty: "一般",
@@ -268,12 +268,14 @@ export default {
         {
           sid: "1",
           qid: "1",
-          questionStem: "测试2",
+          questionstem: "测试2",
           reference: "",
           problem: "",
           difficulty: "一般",
           eid: "2",
-          date: "2019-08-17"
+          date: "2019-08-17",
+          s: { sid: 1, name: "", image: "" },
+          q: { qid: 1, question: "", questionTest: "" }
         }
       ],
       dialogFormVisible: false,
