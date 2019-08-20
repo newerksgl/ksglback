@@ -40,13 +40,13 @@
                   <el-date-picker
                     type="date"
                     placeholder="选择日期"
-                    v-model="User.date"
+                    v-model="User.register"
                     style="width: 100%;"
                   ></el-date-picker>
                 </el-col>
                 <el-col class="line" :span="2">-</el-col>
                 <el-col :span="11">
-                  <el-time-picker placeholder="选择时间" v-model="User.time" style="width: 100%;"></el-time-picker>
+                  <el-time-picker placeholder="选择时间" v-model="User.register" style="width: 100%;"></el-time-picker>
                 </el-col>
               </el-form-item>
             </el-col>
@@ -62,11 +62,9 @@
               </el-form-item>
             </el-col>
             <el-col :span="11">
-              <el-form-item label="用户组">
-                <el-select v-model="UserRole.role_name" placeholder="用户类型">
-                  <el-option label="默认用户" value="1"></el-option>
-                  <el-option label="学生" value="2"></el-option>
-                  <el-option label="管理员" value="3"></el-option>
+              <el-form-item label="角色">
+                <el-select v-model="User.rid" placeholder="角色类型">
+                  <el-option v-for="r in UserRole" :label="r.role_name" v-model="r.rid"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -116,17 +114,13 @@
         <el-form-item label="密码" :label-width="formLabelWidth">
           <el-input v-model="upUser.password" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="注册IP" :label-width="formLabelWidth">
-          <el-input v-model="upUser.users_ip" autocomplete="off"></el-input>
-        </el-form-item>
         <el-form-item label="积分点数" :label-width="formLabelWidth">
           <el-input v-model="upUser.integral" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="角色" :label-width="formLabelWidth">
-          <el-input v-model="upUser.rid" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="注册时间" :label-width="formLabelWidth">
-          <el-input v-model="upUser.register" autocomplete="off"></el-input>
+          <el-select v-model="upUser.rid" placeholder="用户类型">
+            <el-option v-for="r in UserRole" :label="r.role_name" v-model="r.rid"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -215,7 +209,25 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          console.log(this.User);
+          let config = {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
+          };
+          // this.request
+          //   .post("Users/insert", this.User)
+          //   .then(res => {
+          //     this.getTableData();
+          //   })
+          //   .catch(err => {
+          //     this.$message({
+          //       showClose: true,
+          //       message: "请求失败",
+          //       type: "error",
+          //       duration: 1000
+          //     });
+          //   });
         } else {
           console.log("error submit!!");
           return false;
@@ -304,11 +316,9 @@ export default {
     },
     clearUser() {
       this.User = {
-        id: "",
+        pri_id: "",
         name: "",
         email: "",
-        date: "",
-        time: "",
         password: "",
         users_ip: "",
         integral: "",
