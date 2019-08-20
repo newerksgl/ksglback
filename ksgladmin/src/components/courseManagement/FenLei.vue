@@ -44,7 +44,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="update()">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="添加分类" :visible.sync="dialogFormVisible1">
@@ -109,6 +109,22 @@ export default {
     };
   },
   methods: {
+    update() {
+      this.request
+        .post("subject/add", this.param, config)
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
+      dialogFormVisible = false;
+    },
     show(file) {
       console.log(file.url);
     },
@@ -120,8 +136,8 @@ export default {
           "Content-Type": "multipart/form-data"
         }
       };
-      axios
-        .post("http://192.168.43.29:9999/subject/add", this.param, config)
+      this.request
+        .post("subject/add", this.param, config)
         .then(res => {
           console.log(res.data);
         })
@@ -154,8 +170,7 @@ export default {
         .post("subject/findAll")
         .then(res => {
           this.tableData = res.data;
-          console.log(res.data);
-          //   }
+          // console.log(res.data);
         })
         .catch(err => {
           this.$message({
@@ -168,9 +183,6 @@ export default {
     },
     edit(row) {
       this.dialogFormVisible = true;
-      console.log(row.sid);
-      console.log(row.image);
-      console.log(row.name);
       this.form.sid = row.sid;
       this.form.image = row.image;
       this.form.name = row.name;
@@ -182,9 +194,10 @@ export default {
       this.dialogFormVisible1 = true;
     },
     handleDelete(row) {
-      const id = row.sid;
+      const id = { id: row.sid };
+      console.log(id);
       this.request
-        .post("subject/findAll", { sid: id })
+        .post("subject/del", id)
         .then(res => {
           if (res.data != "") {
             this.$message({

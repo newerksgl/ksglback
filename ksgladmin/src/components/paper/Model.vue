@@ -102,8 +102,6 @@ export default {
     },
     goedit(row) {
       this.dialogFormVisible = true;
-      console.log(row.qid);
-      console.log(row.question);
       this.form.qid = row.qid;
       this.form.question = row.question;
     },
@@ -115,8 +113,10 @@ export default {
     edit() {
       const question = {
         qid: this.form.qid,
-        question: this.form.question
+        question: this.form.question,
+        questionTest: null
       };
+      console.log(question);
       this.request
         .post("question/update", question)
         .then(res => {
@@ -136,7 +136,6 @@ export default {
             duration: 1000
           });
         });
-
       this.dialogFormVisible = false;
     },
     addModel() {

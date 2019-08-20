@@ -62,28 +62,20 @@
       </el-col>
     </el-row>
 
-    <el-dialog title="编辑分类" :visible.sync="dialogFormVisible">
+    <el-dialog title="修改试题" :visible.sync="dialogFormVisible">
       <el-form :model="upExas">
         <el-row>
           <el-col :span="8">
             <el-form-item label="科目">
-              <el-select v-model="upExas.sid" placeholder="科目">
-                <el-option label="语文" value="1"></el-option>
-                <el-option label="数学" value="2"></el-option>
-                <el-option label="英语" value="3"></el-option>
-                <el-option label="历史" value="4"></el-option>
-                <el-option label="政治" value="5"></el-option>
-                <el-option label="生物" value="6"></el-option>
-                <el-option label="地理" value="7"></el-option>
-                <el-option label="化学" value="8"></el-option>
+              <el-select v-model="upExas.s.name" placeholder="选择科目">
+                <el-option v-for="s in Subject" :label="s.name" v-model="s.sid"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="题型">
-              <el-select v-model="upExas.qid" :value="Exas.qid" placeholder="选择题型">
-                <el-option label="选择题" value="1"></el-option>
-                <el-option label="填空题" value="2"></el-option>
+              <el-select v-model="upExas.q.question" placeholder="选择题型">
+                <el-option v-for="q in Question" :label="q.question" v-model="q.qid"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -99,7 +91,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="题干">
-              <el-input type="textarea" v-model="upExas.questionStem"></el-input>
+              <el-input type="textarea" v-model="upExas.questionstem" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -173,7 +165,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="题干">
-              <el-input type="textarea" v-model="Exas.questionStem"></el-input>
+              <el-input type="textarea" v-model="Exas.questionstem"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -235,7 +227,7 @@ export default {
       Exas: {
         sid: "1",
         qid: "1",
-        questionStem: "",
+        questionstem: "",
         reference: "",
         problem: "",
         difficulty: "普通",
@@ -243,14 +235,16 @@ export default {
         date: "2019-08-17 11:49:11"
       },
       upExas: {
-        sid: "",
+        sid: "1",
         qid: "1",
-        questionStem: "",
+        questionstem: "",
         reference: "",
         problem: "",
-        difficulty: "简单",
-        eid: "",
-        date: ""
+        difficulty: "普通",
+        eid: "1",
+        date: "2019-08-17",
+        s: { sid: 1, name: "语文", image: "" },
+        q: { qid: 1, question: "选择题", questionTest: "" }
       },
       exasSubjectQuestion: [
         {
@@ -296,7 +290,7 @@ export default {
       this.Exas = {
         sid: "1",
         qid: "1",
-        questionStem: "",
+        questionstem: "",
         reference: "",
         problem: "",
         difficulty: "普通",
@@ -315,9 +309,6 @@ export default {
           second
       };
       this.dialogFormVisible1 = true;
-    },
-    show(file) {
-      console.log(file.url);
     },
     addExas() {
       console.log(this.Exas);
@@ -341,23 +332,42 @@ export default {
         });
       this.dialogFormVisible1 = false;
     },
-    beforeupload(file) {
-      console.log(file);
-      //创建临时的路径来展示图片
-      var windowURL = window.URL || window.webkitURL;
-
-      this.form.image = windowURL.createObjectURL(file);
-      //重新写一个表单上传的方法
-      this.param = new FormData();
-      this.param.append("image", file, file.name);
-    },
     getTableData() {
       this.request
         .post("exasSubjectQuestion/find")
         .then(res => {
           this.exasSubjectQuestion = res.data.data;
           console.log(res.data);
-          //   }
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
+
+      this.request
+        .post("subject/findAll")
+        .then(res => {
+          this.Subject = res.data;
+          console.log(res.data);
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
+
+      this.request
+        .post("question/findAll")
+        .then(res => {
+          this.Question = res.data;
+          console.log(res.data);
         })
         .catch(err => {
           this.$message({
@@ -370,14 +380,20 @@ export default {
     },
     edit(row) {
       this.upExas = {
-        sid: row.sid,
-        qid: row.qid,
-        questionStem: row.question_stem,
+        sid: row.s.sid,
+        qid: row.q.qid,
+        questionstem: row.questionstem,
         reference: row.reference,
         problem: row.problem,
         difficulty: row.difficulty,
         eid: row.eid,
-        date: row.date
+        date: row.date,
+        s: { sid: row.s.sid, name: row.s.name, image: row.s.image },
+        q: {
+          qid: row.q.qid,
+          question: row.q.question,
+          questionTest: row.q.questionTest
+        }
       };
       this.dialogFormVisible = true;
       console.log(row);
