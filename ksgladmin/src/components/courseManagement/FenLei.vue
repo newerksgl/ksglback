@@ -110,8 +110,14 @@ export default {
   },
   methods: {
     update() {
+      this.param.append("name", this.form.name);
+      let config = {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      };
       this.request
-        .post("subject/add", this.param, config)
+        .post("subject/update", this.param, config)
         .then(res => {
           console.log(res.data);
         })

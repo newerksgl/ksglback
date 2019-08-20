@@ -97,7 +97,7 @@
               <template slot-scope="scope">
                 <label class="el-icon-edit" @click="edit(scope.row)"></label>
                 <span>&nbsp;&nbsp;</span>
-                <label class="el-icon-circle-close" @click="remove(scope.row.id)"></label>
+                <label class="el-icon-circle-close" @click="remove(scope.row.pri_id)"></label>
               </template>
             </el-table-column>
           </el-table>
@@ -163,27 +163,23 @@ export default {
     };
     return {
       User: {
-        id: "",
+        pri_id: 1,
         name: "",
         email: "",
-        date: "",
-        time: "",
         password: "",
         users_ip: "",
-        integral: "",
-        rid: "",
+        integral: 0,
+        rid: 1,
         register: ""
       },
       upUser: {
-        id: "",
+        pri_id: 1,
         name: "",
         email: "",
-        date: "",
-        time: "",
         password: "",
         users_ip: "",
-        integral: "",
-        rid: "",
+        integral: 0,
+        rid: 1,
         register: ""
       },
       isAddUser: false,
@@ -191,78 +187,8 @@ export default {
       formLabelWidth: "120px",
       Users: [
         {
-          id: 1,
+          pri_id: 1,
           name: "王小虎",
-          email: "wangxiaohu@163.com",
-          password: "123456",
-          users_ip: "192.168.43.29",
-          integral: 0,
-          rid: 1,
-          register: "2019-08-15"
-        },
-        {
-          id: 2,
-          name: "王小虎1",
-          email: "wangxiaohu@163.com",
-          password: "123456",
-          users_ip: "192.168.43.29",
-          integral: 0,
-          rid: 1,
-          register: "2019-08-15"
-        },
-        {
-          id: 3,
-          name: "王小虎2",
-          email: "wangxiaohu@163.com",
-          password: "123456",
-          users_ip: "192.168.43.29",
-          integral: 0,
-          rid: 1,
-          register: "2019-08-15"
-        },
-        {
-          id: 4,
-          name: "王小虎3",
-          email: "wangxiaohu@163.com",
-          password: "123456",
-          users_ip: "192.168.43.29",
-          integral: 0,
-          rid: 1,
-          register: "2019-08-15"
-        },
-        {
-          id: 5,
-          name: "王小虎4",
-          email: "wangxiaohu@163.com",
-          password: "123456",
-          users_ip: "192.168.43.29",
-          integral: 0,
-          rid: 1,
-          register: "2019-08-15"
-        },
-        {
-          id: 6,
-          name: "王小虎5",
-          email: "wangxiaohu@163.com",
-          password: "123456",
-          users_ip: "192.168.43.29",
-          integral: 0,
-          rid: 1,
-          register: "2019-08-15"
-        },
-        {
-          id: 7,
-          name: "王小虎6",
-          email: "wangxiaohu@163.com",
-          password: "123456",
-          users_ip: "192.168.43.29",
-          integral: 0,
-          rid: 1,
-          register: "2019-08-15"
-        },
-        {
-          id: 8,
-          name: "王小虎7",
           email: "wangxiaohu@163.com",
           password: "123456",
           users_ip: "192.168.43.29",
@@ -296,8 +222,68 @@ export default {
         }
       });
     },
+    getTableData() {
+      this.request
+        .post("Users/findAll")
+        .then(res => {
+          this.Users = res.data;
+          console.log(res.data);
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
+
+      this.request
+        .post("Userrole/findAll")
+        .then(res => {
+          this.UserRole = res.data;
+          console.log(res.data);
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
+    },
     remove(id) {
+      const priId = { priId: id };
       console.log(id);
+      this.request
+        .post("Users/delete", priId)
+        .then(res => {
+          if (res.data != "") {
+            this.$message({
+              showClose: true,
+              message: "删除成功！",
+              type: "success",
+              duration: 1000
+            });
+            this.getTableData();
+          } else {
+            this.$message({
+              showClose: true,
+              message: "删除失败!",
+              type: "error",
+              duration: 1000
+            });
+          }
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
     },
     edit(row) {
       console.log(row);
@@ -345,6 +331,9 @@ export default {
       };
       this.dialogFormVisible = false;
     }
+  },
+  mounted() {
+    this.getTableData();
   }
 };
 </script>
