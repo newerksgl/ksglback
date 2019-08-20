@@ -8,13 +8,13 @@
         </el-breadcrumb>
       </el-col>
       <el-col :span="6" :offset="6">
-        <el-button type="text" size="mini" @click="goAdd()">添加分类</el-button>
+        <el-button type="text" size="mini" @click="goAdd()">添加试卷</el-button>
       </el-col>
     </el-row>
     <el-row>
       <el-col :offset="2">
         <el-tabs v-model="activeName">
-          <el-tab-pane label="分类管理" name="first">
+          <el-tab-pane label="试卷类表" name="first">
             <el-table :data="tableData" height="250" style="width: 100%">
               <el-table-column prop="sid" label="ID" width="180"></el-table-column>
               <el-table-column prop="image" label="略缩图" width="180"></el-table-column>
@@ -84,14 +84,10 @@ export default {
       activeName: "first",
       tableData: [
         {
-          sid: "1",
-          name: ".NET",
-          image: ""
-        },
-        {
-          sid: "2",
-          name: "Java",
-          image: ""
+          pid: "",
+          pname: "",
+          sid: "",
+          topicslist: ""
         }
       ],
       dialogImageUrl: "",
