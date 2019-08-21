@@ -35,7 +35,7 @@
             </el-col>
             <el-col :span="10" :offset="4">
               <el-form-item label="默认角色">
-                <el-select v-model="UserRole.defaultrole">
+                <el-select v-model="UserRole.defaultrole" value="用户">
                   <el-option label="用户" value="1"></el-option>
                   <el-option label="学生" value="2"></el-option>
                   <el-option label="教师" value="3"></el-option>
@@ -106,8 +106,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="clearupUser();">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="update()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -140,7 +140,7 @@ export default {
         role_name: "",
         defaultrole: "1",
         description: "",
-        isadmin: true
+        isadmin: false
       },
       upUserRole: {
         rid: "",
@@ -151,32 +151,11 @@ export default {
       },
       UserRoles: [
         {
-          rid: "1",
+          rid: 1,
           role_name: "用户",
-          defaultrole: "1",
+          defaultrole: 1,
           description: "测试数据",
           isadmin: false
-        },
-        {
-          rid: "2",
-          role_name: "学生",
-          defaultrole: "2",
-          description: "测试数据",
-          isadmin: false
-        },
-        {
-          rid: "3",
-          role_name: "教师",
-          defaultrole: "3",
-          description: "测试数据",
-          isadmin: false
-        },
-        {
-          rid: "4",
-          role_name: "管理员",
-          defaultrole: "4",
-          description: "测试数据",
-          isadmin: true
         }
       ],
       rules: {
@@ -189,47 +168,180 @@ export default {
   methods: {
     clearRole() {
       this.UserRole = {
-        rid: "",
+        rid: null,
         role_name: "",
         defaultrole: "1",
         description: "",
         isadmin: false
       };
-    },
-    clearupUser() {
-      this.upUserRole = {
-        rid: "",
-        role_name: "",
-        defaultrole: "1",
-        description: "",
-        isadmin: false
-      };
-      this.dialogFormVisible = false;
     },
     submitForm(formName) {
-      console.log(this.UserRole);
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          let config = {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
+          };
+          // 0 false  1 true
+          if (this.UserRole.isadmin) {
+            this.UserRole.isadmin = 1;
+          } else {
+            this.UserRole.isadmin = 0;
+          }
+          var userrole = {
+            rid: null,
+            role_name: this.UserRole.role_name,
+            defaultrole: parseInt(this.UserRole.defaultrole),
+            description: this.UserRole.description,
+            isadmin: this.UserRole.isadmin
+          };
+          this.request
+            .post("Userrole/insert", userrole, config)
+            .then(res => {
+              if (res.data != "") {
+                this.$message({
+                  showClose: true,
+                  message: "添加成功！",
+                  type: "success",
+                  duration: 1000
+                });
+                this.getTableData();
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: "添加失败!",
+                  type: "error",
+                  duration: 1000
+                });
+              }
+            })
+            .catch(err => {
+              this.$message({
+                showClose: true,
+                message: "请求失败",
+                type: "error",
+                duration: 1000
+              });
+            });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
+    update() {
+      let config = {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      };
+      // 0 false  1 true
+      if (this.upUserRole.isadmin) {
+        this.upUserRole.isadmin = 1;
+      } else {
+        this.upUserRole.isadmin = 0;
+      }
+      var userrole = {
+        rid: this.upUserRole.rid,
+        role_name: this.upUserRole.role_name,
+        defaultrole: parseInt(this.upUserRole.defaultrole),
+        description: this.upUserRole.description,
+        isadmin: this.upUserRole.isadmin
+      };
+      this.request
+        .post("Userrole/update", userrole, config)
+        .then(res => {
+          if (res.data != "") {
+            this.$message({
+              showClose: true,
+              message: "修改成功！",
+              type: "success",
+              duration: 1000
+            });
+            this.dialogFormVisible = false;
+            this.getTableData();
+          } else {
+            this.$message({
+              showClose: true,
+              message: "修改失败!",
+              type: "error",
+              duration: 1000
+            });
+          }
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
+    },
     remove(id) {
-      console.log(id);
+      if (confirm("确定要删除该角色？")) {
+        var rid = {
+          rid: id
+        };
+        this.request
+          .post("Userrole/deleteById", rid)
+          .then(res => {
+            if (res.data != "") {
+              this.$message({
+                showClose: true,
+                message: "删除成功！",
+                type: "success",
+                duration: 1000
+              });
+              this.getTableData();
+            } else {
+              this.$message({
+                showClose: true,
+                message: "删除失败!",
+                type: "error",
+                duration: 1000
+              });
+            }
+          })
+          .catch(err => {
+            this.$message({
+              showClose: true,
+              message: "请求失败",
+              type: "error",
+              duration: 1000
+            });
+          });
+      }
     },
     edit(row) {
-      console.log(row);
-      this.upUserRole.rid = row.id;
+      this.upUserRole.rid = row.rid;
       this.upUserRole.role_name = row.role_name;
       this.upUserRole.defaultrole = row.defaultrole;
       this.upUserRole.description = row.description;
-      this.upUserRole.isadmin = row.isadmin;
-
+      this.upUserRole.isadmin = row.isadmin == 1 ? true : false;
       this.dialogFormVisible = true;
+    },
+    getTableData() {
+      this.request
+        .post("Userrole/findAll")
+        .then(res => {
+          if (res.data != "") {
+            this.UserRoles = res.data;
+          }
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
     }
+  },
+  mounted() {
+    this.getTableData();
   }
 };
 </script>
