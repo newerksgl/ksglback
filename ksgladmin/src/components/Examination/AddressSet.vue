@@ -15,13 +15,15 @@
       <el-col :offset="2">
         <el-tabs v-model="activeName">
           <el-tab-pane label="地区设置" name="first">
-            <el-table :data="tableData" height="250" style="width: 100%">
-              <el-table-column prop="reid" label="ID"></el-table-column>
-              <el-table-column prop="name" label="名称"></el-table-column>
+            <el-table :data="tableData" height="550" style="width: 100%">
+              <el-table-column prop="reid" label="编号"></el-table-column>
+              <el-table-column prop="name" label="地区名称"></el-table-column>
+              <el-table-column prop="areaCode" label="地区编号"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button type="text" size="mini" @click="goedit(scope.row)">编辑</el-button>
-                  <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+                  <label class="el-icon-edit" @click="goedit(scope.row)"></label>
+                  <span>&nbsp;&nbsp;</span>
+                  <label class="el-icon-circle-close" @click="handleDelete(scope.row.reid)"></label>
                 </template>
               </el-table-column>
             </el-table>
@@ -35,8 +37,11 @@
         <el-form-item label="ID" :label-width="formLabelWidth">
           <el-input v-model="form.reid" autocomplete="off" disabled></el-input>
         </el-form-item>
-        <el-form-item label="名称" :label-width="formLabelWidth">
+        <el-form-item label="地区名称" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="地区编号" :label-width="formLabelWidth">
+          <el-input v-model="form.areaCode" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -47,8 +52,11 @@
 
     <el-dialog title="添加地区" :visible.sync="dialogFormVisible2">
       <el-form :model="form">
-        <el-form-item label="名称" :label-width="formLabelWidth">
+        <el-form-item label="名称编号" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="地区编号" :label-width="formLabelWidth">
+          <el-input v-model="form.areaCode" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -64,10 +72,11 @@ export default {
   data() {
     return {
       activeName: "first",
-      tableData: [],
+      tableData: [{ reid: "", name: "", areaCode: "" }],
       form: {
         reid: "",
-        name: ""
+        name: "",
+        areaCode: ""
       },
       dialogFormVisible: false,
       dialogFormVisible2: false,
@@ -76,11 +85,11 @@ export default {
   },
   components: {},
   methods: {
-    handleDelete(row) {
+    handleDelete(reid) {
       if (confirm("确认删除吗?\n此操作不可以恢复！")) {
-        console.log(row.reid);
+        console.log(reid);
         this.request
-          .post("region/del", { id: row.reid })
+          .post("region/del", { id: reid })
           .then(res => {
             this.$message({
               showClose: true,
@@ -102,31 +111,47 @@ export default {
     },
     goedit(row) {
       this.dialogFormVisible = true;
-      console.log(row.reid);
-      console.log(row.name);
       this.form.reid = row.reid;
       this.form.name = row.name;
+      this.form.areaCode = row.areaCode;
     },
     goAdd() {
       this.form.reid = "";
       this.form.name = "";
+      this.form.areaCode = "";
       this.dialogFormVisible2 = true;
     },
     edit() {
-      const question = {
-        reid: this.form.reid,
-        name: this.form.name
+      let config = {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
       };
+      const region = {
+        reid: this.form.reid,
+        name: this.form.name,
+        areaCode: this.form.areaCode
+      };
+      console.log(region);
       this.request
-        .post("region/update", question)
+        .post("region/update", region, config)
         .then(res => {
-          this.$message({
-            showClose: true,
-            message: "修改成功",
-            type: "success",
-            duration: 1000
-          });
-          this.getTableData();
+          if (res.data == 1) {
+            this.$message({
+              showClose: true,
+              message: "修改成功",
+              type: "success",
+              duration: 1000
+            });
+            this.getTableData();
+          } else {
+            this.$message({
+              showClose: true,
+              message: "修改失败",
+              type: "error",
+              duration: 1000
+            });
+          }
         })
         .catch(err => {
           this.$message({
@@ -140,19 +165,37 @@ export default {
       this.dialogFormVisible = false;
     },
     addModel() {
-      const question = {
-        name: this.form.name
+      let config = {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
       };
+      const region = {
+        reid: null,
+        name: this.form.name,
+        areaCode: this.form.areaCode
+      };
+      console.log(region);
       this.request
-        .post("region/add", question)
+        .post("region/add", region, config)
         .then(res => {
-          this.$message({
-            showClose: true,
-            message: "添加成功",
-            type: "success",
-            duration: 1000
-          });
-          this.getTableData();
+          console.log(res);
+          if (res.data == 1) {
+            this.$message({
+              showClose: true,
+              message: "添加成功",
+              type: "success",
+              duration: 1000
+            });
+            this.getTableData();
+          } else {
+            this.$message({
+              showClose: true,
+              message: "添加失败",
+              type: "error",
+              duration: 1000
+            });
+          }
         })
         .catch(err => {
           this.$message({
@@ -170,8 +213,6 @@ export default {
         .post("region/findAll")
         .then(res => {
           this.tableData = res.data;
-
-          console.log(res.data);
         })
         .catch(err => {
           this.$message({

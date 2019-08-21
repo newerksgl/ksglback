@@ -15,17 +15,37 @@
       <el-col :offset="2">
         <el-tabs v-model="activeName">
           <el-tab-pane label="考场列表" name="first">
-            <el-table :data="tableData" height="250" style="width: 100%">
-              <el-table-column prop="id" label="ID" width="180"></el-table-column>
-              <el-table-column prop="courseName" label="科目" width="180"></el-table-column>
-              <el-table-column prop="addressName" label="地区" width="180"></el-table-column>
-              <el-table-column prop="number" label="开通人数" width="180"></el-table-column>
-              <el-table-column prop="stateTest" label="状态" width="180"></el-table-column>
-              <el-table-column prop="name" label="考场名称" width="180"></el-table-column>
+            <el-table :data="tableData" height="550" style="width: 100%">
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <el-form label-position="left" inline class="demo-table-expand">
+                    <el-form-item label="科目">
+                      <span>{{ props.row.courseName }}</span>
+                    </el-form-item>
+                    <el-form-item label="地区">
+                      <span>{{ props.row.addressName }}</span>
+                    </el-form-item>
+                    <el-form-item label="开通人数">
+                      <span>{{ props.row.number }}</span>
+                    </el-form-item>
+                    <el-form-item label="状态">
+                      <span>{{ props.row.stateTest }}</span>
+                    </el-form-item>
+                    <el-form-item label="考场名称">
+                      <span>{{ props.row.name }}</span>
+                    </el-form-item>
+                  </el-form>
+                </template>
+              </el-table-column>
+              <el-table-column prop="courseName" label="科目"></el-table-column>
+              <el-table-column prop="addressName" label="地区"></el-table-column>
+              <el-table-column prop="name" label="考场名称"></el-table-column>
+
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button type="text" size="mini" @click="edit(scope.row)">编辑</el-button>
-                  <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+                  <label class="el-icon-edit" @click="edit(scope.row)"></label>
+                  <span>&nbsp;&nbsp;</span>
+                  <label class="el-icon-circle-close" @click="handleDelete(scope.row.id)"></label>
                 </template>
               </el-table-column>
             </el-table>
@@ -125,6 +145,7 @@ export default {
   },
   components: {},
   methods: {
+    remove(id) {},
     edit(row) {
       this.dialogFormVisible = true;
       this.form.id = row.id;
@@ -146,7 +167,11 @@ export default {
       this.form.reid = "";
       this.form.name = "";
       this.dialogFormVisible2 = true;
-    }
+    },
+    getTableData() {}
+  },
+  mounted() {
+    this.getTableData();
   }
 };
 </script>
