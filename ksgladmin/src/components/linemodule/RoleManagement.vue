@@ -199,7 +199,7 @@ export default {
           this.request
             .post("Userrole/insert", userrole, config)
             .then(res => {
-              if (res.data != "") {
+              if (res.data != 0) {
                 this.$message({
                   showClose: true,
                   message: "添加成功！",
@@ -252,7 +252,7 @@ export default {
       this.request
         .post("Userrole/update", userrole, config)
         .then(res => {
-          if (res.data != "") {
+          if (res.data != 0) {
             this.$message({
               showClose: true,
               message: "修改成功！",
@@ -287,7 +287,7 @@ export default {
         this.request
           .post("Userrole/deleteById", rid)
           .then(res => {
-            if (res.data != "") {
+            if (res.data == 1) {
               this.$message({
                 showClose: true,
                 message: "删除成功！",
@@ -295,12 +295,19 @@ export default {
                 duration: 1000
               });
               this.getTableData();
-            } else {
+            } else if (res.data == 0) {
               this.$message({
                 showClose: true,
                 message: "删除失败!",
                 type: "error",
                 duration: 1000
+              });
+            } else {
+              this.$message({
+                showClose: true,
+                message: "删除失败! 该角色已有用户绑定！",
+                type: "error",
+                duration: 2000
               });
             }
           })

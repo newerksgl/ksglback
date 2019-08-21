@@ -10,8 +10,6 @@ import MoKuaigl from "../components/courseManagement/MoKuaigl.vue";
 import Ccie from '../components/ccie/Ccie.vue'
 // 用户模块
 import User from '../components/linemodule/User.vue'
-import ModelManagement from '../components/linemodule/ModelManagement.vue'
-import Moduledesign from '../components/linemodule/Moduledesign.vue'
 import RoleManagement from '../components/linemodule/RoleManagement.vue'
 import UserManagement from '../components/linemodule/UserManagement.vue'
 //考试模块
@@ -59,16 +57,6 @@ export default new Router({
       name: 'linemodule',
       component: User,
       children: [
-        {
-          path: '/modelmanagement',
-          name: 'modelmanagement',
-          component: ModelManagement
-        },
-        {
-          path: '/moduledesign',
-          name: 'moduledesign',
-          component: Moduledesign
-        },
         {
           path: '/rolemanagement',
           name: 'rolemanagement',

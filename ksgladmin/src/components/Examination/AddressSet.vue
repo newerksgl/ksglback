@@ -16,8 +16,8 @@
         <el-tabs v-model="activeName">
           <el-tab-pane label="地区设置" name="first">
             <el-table :data="tableData" height="250" style="width: 100%">
-              <el-table-column prop="reid" label="ID" width="180"></el-table-column>
-              <el-table-column prop="name" label="名称" width="180"></el-table-column>
+              <el-table-column prop="reid" label="ID"></el-table-column>
+              <el-table-column prop="name" label="名称"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-button type="text" size="mini" @click="goedit(scope.row)">编辑</el-button>

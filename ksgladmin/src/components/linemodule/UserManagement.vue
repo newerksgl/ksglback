@@ -9,75 +9,66 @@
         </el-breadcrumb>
       </el-col>
       <el-col :span="2" :offset="1">
-        <el-button type="primary" @click="clearUser();isAddUser=!isAddUser">
-          添加用户
-          <span v-if="!isAddUser" class="el-icon-caret-bottom"></span>
-          <span v-if="isAddUser" class="el-icon-caret-top"></span>
-        </el-button>
+        <el-button type="primary" @click="clearUser();">添加用户</el-button>
       </el-col>
     </el-row>
 
-    <el-row v-if="isAddUser">
-      <el-col :span="24">&nbsp;</el-col>
-      <el-col :offset="1">
-        <el-form
-          :model="User"
-          status-icon
-          :rules="rules"
-          ref="User"
-          label-width="100px"
-          class="demo-User"
-        >
-          <el-row>
-            <el-col :span="10">
-              <el-form-item label="用户名" prop="name">
-                <el-input type="test" v-model="User.name" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="14">
-              <el-form-item label="注册时间">
-                <el-col :span="11">
-                  <el-date-picker
-                    type="date"
-                    placeholder="选择日期"
-                    v-model="User.register"
-                    style="width: 100%;"
-                  ></el-date-picker>
-                </el-col>
-                <el-col class="line" :span="2">-</el-col>
-                <el-col :span="11">
-                  <el-time-picker placeholder="选择时间" v-model="User.register" style="width: 100%;"></el-time-picker>
-                </el-col>
-              </el-form-item>
-            </el-col>
+    <el-dialog title="添加分类" :visible.sync="dialogFormVisible1">
+      <el-form
+        :model="User"
+        status-icon
+        :rules="rules"
+        ref="User"
+        label-width="100px"
+        class="demo-User"
+      >
+        <el-row>
+          <el-col :span="10">
+            <el-form-item label="用户名" prop="name">
+              <el-input type="test" v-model="User.name" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="14">
+            <el-form-item label="注册时间">
+              <el-col :span="11">
+                <el-date-picker
+                  type="date"
+                  placeholder="选择日期"
+                  v-model="User.register"
+                  style="width: 100%;"
+                ></el-date-picker>
+              </el-col>
+              <el-col class="line" :span="2">-</el-col>
+              <el-col :span="11">
+                <el-time-picker placeholder="选择时间" v-model="User.register" style="width: 100%;"></el-time-picker>
+              </el-col>
+            </el-form-item>
+          </el-col>
 
-            <el-col :span="10">
-              <el-form-item label="密码" prop="password">
-                <el-input type="password" v-model="User.password" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="14">
-              <el-form-item label="邮箱" prop="email">
-                <el-input type="email" v-model="User.email" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="11">
-              <el-form-item label="角色">
-                <el-select v-model="User.rid" placeholder="角色类型">
-                  <el-option v-for="r in UserRole" :label="r.role_name" v-model="r.rid"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6" :offset="7">
-              <el-form-item>
-                <el-button type="primary" @click="submitForm('User')">提交</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </el-col>
-      <el-col :span="24">&nbsp;</el-col>
-    </el-row>
+          <el-col :span="10">
+            <el-form-item label="密码" prop="password">
+              <el-input type="password" v-model="User.password" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="14">
+            <el-form-item label="角色">
+              <el-select v-model="User.rid" placeholder="角色类型">
+                <el-option v-for="r in UserRole" :label="r.role_name" v-model="r.rid"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="邮箱" prop="email">
+              <el-input type="email" v-model="User.email" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible1 = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm('User')">确 定</el-button>
+      </div>
+    </el-dialog>
 
     <el-row>
       <el-col :offset="1">
@@ -124,8 +115,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="clearupUser();">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="update()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -178,6 +169,7 @@ export default {
       },
       isAddUser: false,
       dialogFormVisible: false,
+      dialogFormVisible1: false,
       formLabelWidth: "120px",
       Users: [
         {
@@ -209,37 +201,111 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(this.User);
           let config = {
             headers: {
               "Content-Type": "multipart/form-data"
             }
           };
-          // this.request
-          //   .post("Users/insert", this.User)
-          //   .then(res => {
-          //     this.getTableData();
-          //   })
-          //   .catch(err => {
-          //     this.$message({
-          //       showClose: true,
-          //       message: "请求失败",
-          //       type: "error",
-          //       duration: 1000
-          //     });
-          //   });
+          var user = {
+            pri_id: this.User.pri_id,
+            name: this.User.name,
+            email: this.User.email,
+            password: this.User.password,
+            users_ip: this.User.users_ip,
+            integral: this.User.integral,
+            rid: this.User.rid,
+            register: this.User.register
+          };
+          console.log(user);
+          this.request
+            .post("Users/insert", user)
+            .then(res => {
+              if (res.data == 1) {
+                this.$message({
+                  showClose: true,
+                  message: "添加成功！",
+                  type: "success",
+                  duration: 1000
+                });
+                this.dialogFormVisible = false;
+                this.getTableData();
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: "添加失败!",
+                  type: "error",
+                  duration: 1000
+                });
+              }
+            })
+            .catch(err => {
+              this.$message({
+                showClose: true,
+                message: "请求失败",
+                type: "error",
+                duration: 1000
+              });
+            });
         } else {
           console.log("error submit!!");
           return false;
         }
+        this.dialogFormVisible1 = false;
       });
+    },
+    update() {
+      let config = {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      };
+      var user = {
+        pri_id: this.upUser.pri_id,
+        name: this.upUser.name,
+        email: this.upUser.email,
+        password: this.upUser.password,
+        users_ip: this.upUser.users_ip,
+        integral: this.upUser.integral,
+        rid: this.upUser.rid,
+        register: this.upUser.register
+      };
+      console.log(user);
+      this.request
+        .post("Users/update", user, config)
+        .then(res => {
+          if (res.data == 1) {
+            this.$message({
+              showClose: true,
+              message: "修改成功！",
+              type: "success",
+              duration: 1000
+            });
+            this.dialogFormVisible = false;
+            this.getTableData();
+          } else {
+            this.$message({
+              showClose: true,
+              message: "修改失败!",
+              type: "error",
+              duration: 1000
+            });
+          }
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
+      this.dialogFormVisible = false;
     },
     getTableData() {
       this.request
         .post("Users/findAll")
         .then(res => {
           this.Users = res.data;
-          console.log(res.data);
         })
         .catch(err => {
           this.$message({
@@ -254,7 +320,6 @@ export default {
         .post("Userrole/findAll")
         .then(res => {
           this.UserRole = res.data;
-          console.log(res.data);
         })
         .catch(err => {
           this.$message({
@@ -266,52 +331,51 @@ export default {
         });
     },
     remove(id) {
-      const priId = { priId: id };
-      console.log(id);
-      this.request
-        .post("Users/delete", priId)
-        .then(res => {
-          if (res.data != "") {
+      if (confirm("确定要删除该用户？")) {
+        const priId = { priId: id };
+        console.log(id);
+        this.request
+          .post("Users/delete", priId)
+          .then(res => {
+            if (res.data == 1) {
+              this.$message({
+                showClose: true,
+                message: "删除成功！",
+                type: "success",
+                duration: 1000
+              });
+              this.getTableData();
+            } else {
+              this.$message({
+                showClose: true,
+                message: "删除失败!",
+                type: "error",
+                duration: 1000
+              });
+            }
+          })
+          .catch(err => {
             this.$message({
               showClose: true,
-              message: "删除成功！",
-              type: "success",
-              duration: 1000
-            });
-            this.getTableData();
-          } else {
-            this.$message({
-              showClose: true,
-              message: "删除失败!",
+              message: "请求失败",
               type: "error",
               duration: 1000
             });
-          }
-        })
-        .catch(err => {
-          this.$message({
-            showClose: true,
-            message: "请求失败",
-            type: "error",
-            duration: 1000
           });
-        });
+      }
     },
     edit(row) {
-      console.log(row);
       this.upUser = {
-        id: row.id,
+        pri_id: row.pri_id,
         name: row.name,
         email: row.email,
-        date: row.date,
-        time: row.password,
         password: row.password,
         users_ip: row.users_ip,
-        integral: row.integral,
+        integral: row.integral == "" ? row.integral : 0,
         rid: row.rid,
         register: row.register
       };
-
+      console.log(this.upUser);
       this.dialogFormVisible = true;
     },
     clearUser() {
@@ -325,21 +389,7 @@ export default {
         rid: "",
         register: ""
       };
-    },
-    clearupUser() {
-      this.upUser = {
-        id: "",
-        name: "",
-        email: "",
-        date: "",
-        time: "",
-        password: "",
-        users_ip: "",
-        integral: "",
-        rid: "",
-        register: ""
-      };
-      this.dialogFormVisible = false;
+      this.dialogFormVisible1 = true;
     }
   },
   mounted() {
