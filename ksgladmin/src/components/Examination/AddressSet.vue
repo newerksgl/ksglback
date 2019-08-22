@@ -14,7 +14,7 @@
     <el-row>
       <el-col :offset="2">
         <el-tabs v-model="activeName">
-          <el-tab-pane label="地区设置" name="first">
+          <el-tab-pane label="地区列表" name="first">
             <el-table :data="tableData" height="550" style="width: 100%">
               <el-table-column prop="reid" label="编号"></el-table-column>
               <el-table-column prop="name" label="地区名称"></el-table-column>
@@ -52,7 +52,7 @@
 
     <el-dialog title="添加地区" :visible.sync="dialogFormVisible2">
       <el-form :model="form">
-        <el-form-item label="名称编号" :label-width="formLabelWidth">
+        <el-form-item label="地区名称" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="地区编号" :label-width="formLabelWidth">

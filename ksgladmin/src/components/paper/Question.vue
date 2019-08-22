@@ -82,16 +82,16 @@
           <el-col :span="8">
             <el-form-item label="难度">
               <el-select v-model="upExas.difficulty" placeholder="选择难度">
-                <el-option label="普通" value="1"></el-option>
-                <el-option label="一般" value="2"></el-option>
-                <el-option label="困难" value="3"></el-option>
-                <el-option label="烈狱" value="4"></el-option>
+                <el-option label="普通" value="普通"></el-option>
+                <el-option label="一般" value="一般"></el-option>
+                <el-option label="困难" value="困难"></el-option>
+                <el-option label="炼狱" value="炼狱"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="题干">
-              <el-input type="textarea" v-model="upExas.questionstem" autocomplete="off"></el-input>
+              <el-input type="textarea" v-model="upExas.questionStem" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -124,7 +124,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="update()">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -165,7 +165,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="题干">
-              <el-input type="textarea" v-model="Exas.questionstem"></el-input>
+              <el-input type="textarea" v-model="Exas.questionStem"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -227,7 +227,7 @@ export default {
       Exas: {
         sid: "1",
         qid: "1",
-        questionstem: "",
+        questionStem: "",
         reference: "",
         problem: "",
         difficulty: "普通",
@@ -237,7 +237,7 @@ export default {
       upExas: {
         sid: "1",
         qid: "1",
-        questionstem: "",
+        questionStem: "",
         reference: "",
         problem: "",
         difficulty: "普通",
@@ -255,18 +255,6 @@ export default {
           problem: "",
           difficulty: "一般",
           eid: "1",
-          date: "2019-08-17",
-          s: { sid: 1, name: "", image: "" },
-          q: { qid: 1, question: "", questionTest: "" }
-        },
-        {
-          sid: "1",
-          qid: "1",
-          questionstem: "测试2",
-          reference: "",
-          problem: "",
-          difficulty: "一般",
-          eid: "2",
           date: "2019-08-17",
           s: { sid: 1, name: "", image: "" },
           q: { qid: 1, question: "", questionTest: "" }
@@ -290,7 +278,7 @@ export default {
       this.Exas = {
         sid: "1",
         qid: "1",
-        questionstem: "",
+        questionStem: "",
         reference: "",
         problem: "",
         difficulty: "普通",
@@ -311,7 +299,6 @@ export default {
       this.dialogFormVisible1 = true;
     },
     addExas() {
-      console.log(this.Exas);
       let config = {
         headers: {
           "Content-Type": "multipart/form-data"
@@ -337,7 +324,6 @@ export default {
         .post("exasSubjectQuestion/find")
         .then(res => {
           this.exasSubjectQuestion = res.data.data;
-          console.log(res.data);
         })
         .catch(err => {
           this.$message({
@@ -352,7 +338,6 @@ export default {
         .post("subject/findAll")
         .then(res => {
           this.Subject = res.data;
-          console.log(res.data);
         })
         .catch(err => {
           this.$message({
@@ -367,7 +352,6 @@ export default {
         .post("question/findAll")
         .then(res => {
           this.Question = res.data;
-          console.log(res.data);
         })
         .catch(err => {
           this.$message({
@@ -382,7 +366,7 @@ export default {
       this.upExas = {
         sid: row.s.sid,
         qid: row.q.qid,
-        questionstem: row.questionstem,
+        questionStem: row.questionstem,
         reference: row.reference,
         problem: row.problem,
         difficulty: row.difficulty,
@@ -396,18 +380,30 @@ export default {
         }
       };
       this.dialogFormVisible = true;
-      console.log(row);
     },
-    remove(eid) {
-      const id = { id: eid };
-      console.log(id);
+    update() {
+      var exas = {
+        sid: this.upExas.s.sid,
+        qid: this.upExas.q.qid,
+        questionStem: this.upExas.questionStem,
+        reference: this.upExas.reference,
+        problem: this.upExas.problem,
+        difficulty: this.upExas.difficulty,
+        eid: this.upExas.eid,
+        date: this.upExas.date
+      };
+      let config = {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      };
       this.request
-        .post("exas/del", id)
+        .post("exas/update", exas)
         .then(res => {
-          if (res.data != "") {
+          if (res.data == 1) {
             this.$message({
               showClose: true,
-              message: "删除成功！",
+              message: "修改成功",
               type: "success",
               duration: 1000
             });
@@ -415,7 +411,7 @@ export default {
           } else {
             this.$message({
               showClose: true,
-              message: "删除失败!",
+              message: "修改失败",
               type: "error",
               duration: 1000
             });
@@ -429,6 +425,40 @@ export default {
             duration: 1000
           });
         });
+      this.dialogFormVisible = false;
+    },
+    remove(eid) {
+      const id = { id: eid };
+      if (confirm("确认要删除该试题？")) {
+        this.request
+          .post("exas/del", id)
+          .then(res => {
+            if (res.data != "") {
+              this.$message({
+                showClose: true,
+                message: "删除成功！",
+                type: "success",
+                duration: 1000
+              });
+              this.getTableData();
+            } else {
+              this.$message({
+                showClose: true,
+                message: "删除失败!",
+                type: "error",
+                duration: 1000
+              });
+            }
+          })
+          .catch(err => {
+            this.$message({
+              showClose: true,
+              message: "请求失败",
+              type: "error",
+              duration: 1000
+            });
+          });
+      }
     }
   },
   mounted() {

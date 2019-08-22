@@ -167,7 +167,6 @@ export default {
         rid: 1,
         register: ""
       },
-      isAddUser: false,
       dialogFormVisible: false,
       dialogFormVisible1: false,
       formLabelWidth: "120px",
