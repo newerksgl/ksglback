@@ -14,10 +14,11 @@
     <el-row>
       <el-col :offset="2">
         <el-tabs v-model="activeName">
-          <el-tab-pane label="题型管理" name="first">
+          <el-tab-pane label="题型列表" name="first">
             <el-table :data="tableData" height="250" style="width: 100%">
-              <el-table-column prop="qid" label="ID" width="180"></el-table-column>
-              <el-table-column prop="question" label="名称" width="180"></el-table-column>
+              <el-table-column prop="qid" label="ID"></el-table-column>
+              <el-table-column prop="question" label="题型"></el-table-column>
+              <el-table-column prop="questionTest" label="题型分类"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-button type="text" size="mini" @click="goedit(scope.row)">编辑</el-button>
@@ -35,8 +36,11 @@
         <el-form-item label="ID" :label-width="formLabelWidth">
           <el-input v-model="form.qid" autocomplete="off" disabled></el-input>
         </el-form-item>
-        <el-form-item label="名称" :label-width="formLabelWidth">
+        <el-form-item label="题型" :label-width="formLabelWidth">
           <el-input v-model="form.question" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="题型分类" :label-width="formLabelWidth">
+          <el-input v-model="form.questionTest" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -47,8 +51,11 @@
 
     <el-dialog title="添加题型" :visible.sync="dialogFormVisible2">
       <el-form :model="form">
-        <el-form-item label="名称" :label-width="formLabelWidth">
+        <el-form-item label="题型" :label-width="formLabelWidth">
           <el-input v-model="form.question" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="题型分类" :label-width="formLabelWidth">
+          <el-input v-model="form.questionTest" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -67,7 +74,8 @@ export default {
       tableData: [],
       form: {
         qid: "",
-        question: ""
+        question: "",
+        questionTest: ""
       },
       dialogFormVisible: false,
       dialogFormVisible2: false,
@@ -78,9 +86,9 @@ export default {
   methods: {
     handleDelete(row) {
       if (confirm("确认删除吗?\n此操作不可以恢复！")) {
-        console.log(row.qid);
+        var id = { id: row.qid };
         this.request
-          .post("question/del", { id: row.qid })
+          .post("question/del", id)
           .then(res => {
             this.$message({
               showClose: true,
@@ -104,29 +112,41 @@ export default {
       this.dialogFormVisible = true;
       this.form.qid = row.qid;
       this.form.question = row.question;
+      this.form.questionTest = row.questionTest;
     },
     goAdd() {
       this.form.qid = "";
       this.form.question = "";
+      this.form.questionTest = "";
       this.dialogFormVisible2 = true;
     },
     edit() {
       const question = {
         qid: this.form.qid,
         question: this.form.question,
-        questionTest: null
+        questionTest: this.form.questionTest
       };
       console.log(question);
       this.request
         .post("question/update", question)
         .then(res => {
-          this.$message({
-            showClose: true,
-            message: "修改成功",
-            type: "success",
-            duration: 1000
-          });
-          this.getTableData();
+          if (res.data == 1) {
+            this.$message({
+              showClose: true,
+              message: "修改成功",
+              type: "success",
+              duration: 1000
+            });
+            this.getTableData();
+          } else {
+            this.$message({
+              showClose: true,
+              message: "修改失败",
+              type: "error",
+              duration: 1000
+            });
+          }
+          console.log(res);
         })
         .catch(err => {
           this.$message({
@@ -140,18 +160,29 @@ export default {
     },
     addModel() {
       const question = {
-        question: this.form.question
+        question: this.form.question,
+        questionTest: this.form.questionTest
       };
       this.request
         .post("question/add", question)
         .then(res => {
-          this.$message({
-            showClose: true,
-            message: "添加成功",
-            type: "success",
-            duration: 1000
-          });
-          this.getTableData();
+          if (res.data == 1) {
+            this.$message({
+              showClose: true,
+              message: "添加成功",
+              type: "success",
+              duration: 1000
+            });
+            this.getTableData();
+          } else {
+            this.$message({
+              showClose: true,
+              message: "添加失败",
+              type: "error",
+              duration: 1000
+            });
+          }
+          console.log(res);
         })
         .catch(err => {
           this.$message({
@@ -161,7 +192,6 @@ export default {
             duration: 1000
           });
         });
-
       this.dialogFormVisible2 = false;
     },
     getTableData() {
@@ -169,8 +199,6 @@ export default {
         .post("question/findAll")
         .then(res => {
           this.tableData = res.data;
-          console.log(res.data);
-          //   }
         })
         .catch(err => {
           this.$message({
