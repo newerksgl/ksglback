@@ -41,7 +41,10 @@
           <el-input v-model="form.title" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="略缩图" :label-width="formLabelWidth">
-          <el-input v-model="form.image" autocomplete="off"></el-input>
+          <el-upload class="avatar-uploader" action="http://localhost:9999/subject/singlefile" :show-file-list="true" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+            <img v-if="form.image" :src="form.image" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
         </el-form-item>
         <el-form-item label="视频地址" :label-width="formLabelWidth">
           <el-input v-model="form.address" autocomplete="off"></el-input>
@@ -52,7 +55,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="handleAdd()">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="编辑课程" :visible.sync="dialogFormVisible1">
@@ -115,6 +118,21 @@ export default {
     };
   },
   methods: {
+    getTableData(){
+      this.request
+        .post("curriculumstypes/findAll")
+        .then(res => {
+            this.tableData = res.data;
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: '请求失败',
+            type: 'error',
+            duration: 1000
+          });
+        });
+    },
     goAddKc() {
       this.form.id = "";
       this.form.title = "";
@@ -132,10 +150,25 @@ export default {
       this.form.address = row.address;
       this.form.introduce = row.introduce;
     },
+    handleAvatarSuccess(res, file) {
+        this.form.image = URL.createObjectURL(file.raw);
+      },
+    beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      },
     handleDelete(row) {
       const id = row.id;
       this.request
-        .post("subject/findAll", { id: id })
+        .post("curriculumstypes/del", { id: id })
         .then(res => {
           if (res.data != "") {
             this.$message({
@@ -144,7 +177,7 @@ export default {
               type: "success",
               duration: 1000
             });
-            this.getTableData();
+            this.getTableData();z
           } else {
             this.$message({
               showClose: true,
@@ -162,9 +195,15 @@ export default {
             duration: 1000
           });
         });
+    },
+    handleAdd(){
+
     }
   },
-  components: {}
+  components: {},
+  mounted(){
+    this.getTableData();
+  }
 };
 </script>
 
