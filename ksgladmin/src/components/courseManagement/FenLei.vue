@@ -17,7 +17,11 @@
           <el-tab-pane label="分类管理" name="first">
             <el-table :data="tableData" height="250" style="width: 100%">
               <el-table-column prop="sid" label="ID" width="180"></el-table-column>
-              <el-table-column prop="image" label="略缩图" width="180"></el-table-column>
+              <el-table-column label="略缩图" width="180">
+                <template slot-scope="scope">
+                  <img :src="scope.row.image"/>
+                </template>
+              </el-table-column>
               <el-table-column prop="name" label="名称"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -142,8 +146,8 @@ export default {
           "Content-Type": "multipart/form-data"
         }
       };
-      this.request
-        .post("subject/add", this.param, config)
+      axios
+        .post("http://localhost:9999/subject/add", this.param, config)
         .then(res => {
           console.log(res.data);
         })

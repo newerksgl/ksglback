@@ -41,10 +41,16 @@
           <el-input v-model="form.title" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="略缩图" :label-width="formLabelWidth">
-          <el-upload class="avatar-uploader" action="http://localhost:9999/subject/singlefile" :show-file-list="true" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-            <img v-if="form.image" :src="form.image" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+          <el-row>
+            <el-col :span="16">
+              <img :src="form.image" alt style="width:300px;" />
+            </el-col>
+            <el-col :span="8">
+              <el-upload action="#" list-type="picture-card" :before-upload="beforeupload">
+                <i slot="default" class="el-icon-plus" @click="show(file)"></i>
+              </el-upload>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item label="视频地址" :label-width="formLabelWidth">
           <el-input v-model="form.address" autocomplete="off"></el-input>
@@ -85,6 +91,7 @@
 </template>
 
 <script>
+import axios from "axios"
 export default {
   data() {
     return {
@@ -92,7 +99,6 @@ export default {
       dialogFormVisible: false,
       dialogFormVisible1: false,
       form: {
-        id: "",
         title: "",
         image: "",
         address: "",
@@ -114,7 +120,8 @@ export default {
           introduce: ""
         }
       ],
-      formLabelWidth: "120px"
+      formLabelWidth: "120px",
+      param:{}
     };
   },
   methods: {
@@ -150,21 +157,6 @@ export default {
       this.form.address = row.address;
       this.form.introduce = row.introduce;
     },
-    handleAvatarSuccess(res, file) {
-        this.form.image = URL.createObjectURL(file.raw);
-      },
-    beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
-        if (!isJPG) {
-          this.$message.error('上传图片只能是 JPG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传图片大小不能超过 2MB!');
-        }
-        return isJPG && isLt2M;
-      },
     handleDelete(row) {
       const id = row.id;
       this.request
@@ -197,7 +189,27 @@ export default {
         });
     },
     handleAdd(){
-
+      this.param.append("title", this.form.title);
+      this.param.append("address", this.form.address);
+      this.param.append("introduce", this.form.introduce);
+      let config = {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      };
+      axios
+        .post("http://localhost:9999/curriculumstypes/add", this.param, config)
+        .then(res => {
+          this.getTableData();
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: "请求失败",
+            type: "error",
+            duration: 1000
+          });
+        });
     }
   },
   components: {},
