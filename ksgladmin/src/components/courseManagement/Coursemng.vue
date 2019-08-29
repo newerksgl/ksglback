@@ -18,7 +18,11 @@
             <el-table :data="tableData" height="250" style="width: 100%">
               <el-table-column prop="id" label="ID" width="180"></el-table-column>
               <el-table-column prop="title" label="标题" width="180"></el-table-column>
-              <el-table-column prop="image" label="略缩图" width="180"></el-table-column>
+              <el-table-column prop="image" label="略缩图" width="180">
+                <template slot-scope="scope">
+                  <img :src="scope.row.image" />
+                </template>
+              </el-table-column>
               <el-table-column prop="address" label="视频地址" width="180"></el-table-column>
               <el-table-column prop="introduce" label="课程介绍"></el-table-column>
               <el-table-column label="操作">
@@ -51,6 +55,20 @@
               </el-upload>
             </el-col>
           </el-row>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt />
+          </el-dialog>
+        </el-form-item>
+        <el-form-item label="章节" :label-width="formLabelWidth">
+          <el-select v-model="form.ctid" placeholder="请选择">
+            <el-option value="" key="" label="请选择"></el-option>
+            <el-option
+              v-for="item in chapterTestdata"
+              :key="item.ctid"
+              :label="item.catalog"
+              :value="item.ctid">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="视频地址" :label-width="formLabelWidth">
           <el-input v-model="form.address" autocomplete="off"></el-input>
@@ -102,8 +120,10 @@ export default {
         title: "",
         image: "",
         address: "",
-        introduce: ""
+        introduce: "",
+        ctid:null
       },
+      chapterTestdata:[],
       tableData: [
         {
           id: "1",
@@ -120,8 +140,10 @@ export default {
           introduce: ""
         }
       ],
+      dialogImageUrl: "",
+      dialogVisible: false,
       formLabelWidth: "120px",
-      param:{}
+      param: ""
     };
   },
   methods: {
@@ -188,10 +210,26 @@ export default {
           });
         });
     },
+    getChapterTestData(){
+      this.request
+        .post("chaptertest/findAll")
+        .then(res => {
+            this.chapterTestdata = res.data;
+        })
+        .catch(err => {
+          this.$message({
+            showClose: true,
+            message: '请求失败',
+            type: 'error',
+            duration: 1000
+          });
+        });
+    },
     handleAdd(){
       this.param.append("title", this.form.title);
-      this.param.append("address", this.form.address);
       this.param.append("introduce", this.form.introduce);
+      this.param.append("ctid", this.form.ctid);
+      this.param.append("address", this.form.address);
       let config = {
         headers: {
           "Content-Type": "multipart/form-data"
@@ -210,11 +248,22 @@ export default {
             duration: 1000
           });
         });
-    }
+    },
+    beforeupload(file) {
+      console.log(file);
+      //创建临时的路径来展示图片
+      var windowURL = window.URL || window.webkitURL;
+
+      this.form.image = windowURL.createObjectURL(file);
+      //重新写一个表单上传的方法
+      this.param = new FormData();
+      this.param.append("image", file, file.name);
+    },
   },
   components: {},
   mounted(){
     this.getTableData();
+    this.getChapterTestData();
   }
 };
 </script>
